@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ALLOWED_REQUIREMENTS = ['industrial', 'commercial', 'residential'];
-const ALLOWED_STATUSES = ['new', 'contacted', 'converted'];
+const ALLOWED_STATUSES = ['new', 'in_progress', 'contacted', 'converted', 'rejected'];
+const ALLOWED_PROJECT_CATEGORIES = ['industrial', 'commercial', 'residential'];
 
 const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
 
@@ -31,12 +32,15 @@ const validateContactPayload = (body = {}) => {
   if (!isNonEmptyString(city)) errors.push('city');
   if (!ALLOWED_REQUIREMENTS.includes(String(requirement || '').trim())) errors.push('requirement');
 
-  const parsedMonthlyBill = Number(monthlyBill);
-  if (!Number.isFinite(parsedMonthlyBill) || parsedMonthlyBill <= 0) {
-    errors.push('monthlyBill');
+  // monthlyBill is optional - only validate if provided
+  if (monthlyBill !== undefined && monthlyBill !== null && monthlyBill !== '') {
+    const parsedMonthlyBill = Number(monthlyBill);
+    if (!Number.isFinite(parsedMonthlyBill) || parsedMonthlyBill < 0) {
+      errors.push('monthlyBill');
+    }
   }
 
-  if (!isNonEmptyString(message)) errors.push('message');
+  // message is optional - no validation needed
 
   return errors;
 };
@@ -67,6 +71,47 @@ const validateLeadStatus = (status) => {
   }
 
   return null;
+};
+
+const validateProjectPayload = (body = {}, { requireImageUrl = false } = {}) => {
+  const errors = [];
+  const { projectName, imageUrl, location, city, district, category, systemSizeKw, description } = body;
+
+  if (!isNonEmptyString(projectName)) errors.push('projectName');
+  if (requireImageUrl && !isNonEmptyString(imageUrl)) errors.push('imageUrl');
+  if (!isNonEmptyString(location)) errors.push('location');
+  if (!isNonEmptyString(city)) errors.push('city');
+  if (!isNonEmptyString(district)) errors.push('district');
+  if (!ALLOWED_PROJECT_CATEGORIES.includes(String(category || '').trim())) errors.push('category');
+
+  const parsedSystemSize = Number(systemSizeKw);
+  if (systemSizeKw !== undefined && (!Number.isFinite(parsedSystemSize) || parsedSystemSize <= 0)) {
+    errors.push('systemSizeKw');
+  }
+
+  if (!isNonEmptyString(description)) errors.push('description');
+
+  return errors;
+};
+
+const validateTeamPayload = (body = {}, { requireImageUrl = false } = {}) => {
+  const errors = [];
+  const { name, role, imageUrl, virtualCardLink } = body;
+
+  if (!isNonEmptyString(name)) errors.push('name');
+  if (!isNonEmptyString(role)) errors.push('role');
+  if (requireImageUrl && !isNonEmptyString(imageUrl)) errors.push('imageUrl');
+
+  if (isNonEmptyString(virtualCardLink)) {
+    try {
+      // eslint-disable-next-line no-new
+      new URL(virtualCardLink.trim());
+    } catch {
+      errors.push('virtualCardLink');
+    }
+  }
+
+  return errors;
 };
 
 const validateSolarPayload = (body = {}) => {
@@ -100,12 +145,15 @@ const isValidObjectId = (value) => mongoose.isValidObjectId(value);
 
 module.exports = {
   ALLOWED_REQUIREMENTS,
+  ALLOWED_PROJECT_CATEGORIES,
   ALLOWED_STATUSES,
   isValidObjectId,
   validateContactPayload,
   validateLeadStatus,
   validateLoginPayload,
+  validateProjectPayload,
   validateRequirementFilter,
   validateSolarPayload,
+  validateTeamPayload,
   validateVCardPayload,
 };

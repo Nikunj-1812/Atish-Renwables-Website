@@ -7,6 +7,10 @@ const connectDB = async () => {
     throw new Error('MONGO_URI is not defined');
   }
 
+  if (mongoUri.includes('<db_password>') || mongoUri.includes('<username>') || mongoUri.includes('<cluster-url>')) {
+    throw new Error('MONGO_URI still contains placeholder values. Replace it with your real MongoDB Atlas connection string.');
+  }
+
   try {
     await mongoose.connect(mongoUri);
     console.log('MongoDB connected successfully');

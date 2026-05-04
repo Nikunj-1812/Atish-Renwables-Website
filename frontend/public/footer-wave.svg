@@ -1,0 +1,18 @@
+<svg width="1600" height="240" viewBox="0 0 1600 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="fw1" x1="0" y1="0" x2="1600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F6A73" stop-opacity="0"/>
+      <stop offset="0.35" stop-color="#0F6A73" stop-opacity="0.16"/>
+      <stop offset="0.7" stop-color="#E8F5E9" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#F4B400" stop-opacity="0.10"/>
+    </linearGradient>
+    <linearGradient id="fw2" x1="0" y1="52" x2="1600" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E8F5E9" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#E8F5E9" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#E8F5E9" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <path d="M0 88C150 30 290 16 440 58C570 94 668 140 806 150C962 160 1078 88 1230 50C1352 20 1454 22 1600 48V240H0V88Z" fill="url(#fw1)"/>
+  <path d="M0 122C166 82 304 78 448 112C602 148 724 190 852 194C1002 200 1124 136 1262 104C1378 78 1480 80 1600 100V240H0V122Z" fill="url(#fw2)"/>
+  <path d="M0 148C150 116 292 112 420 140C566 172 706 214 844 214C996 214 1120 164 1262 132C1388 102 1484 100 1600 118" stroke="#F4B400" stroke-opacity="0.16" stroke-width="3" stroke-linecap="round"/>
+</svg>

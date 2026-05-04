@@ -34,7 +34,7 @@ const leadSchema = new mongoose.Schema(
     },
     monthlyBill: {
       type: Number,
-      required: true,
+      required: false,
       min: 0,
     },
     message: {
@@ -44,8 +44,32 @@ const leadSchema = new mongoose.Schema(
     status: {
       type: String,
       default: 'new',
-      enum: ['new', 'contacted', 'converted'],
+      enum: ['new', 'in_progress', 'contacted', 'converted', 'rejected'],
       trim: true,
+    },
+    notes: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    statusHistory: {
+      type: [
+        {
+          status: {
+            type: String,
+            enum: ['new', 'in_progress', 'contacted', 'converted', 'rejected'],
+            required: true,
+          },
+          changedAt: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+      default: function defaultStatusHistory() {
+        const currentStatus = this.status || 'new';
+        return [{ status: currentStatus, changedAt: new Date() }];
+      },
     },
     createdAt: {
       type: Date,

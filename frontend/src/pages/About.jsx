@@ -4,7 +4,6 @@ import AboutSection from '../components/AboutSection';
 import TeamSection from '../components/TeamSection';
 import Loader from '../components/Loader';
 import { getTeam } from '../utils/api';
-import { team as fallbackTeam } from '../data/siteData';
 
 export default function About() {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -16,10 +15,14 @@ export default function About() {
     const loadTeam = async () => {
       try {
         const response = await getTeam();
+        const teamData = response?.data?.teamMembers || response?.teamMembers || [];
+        console.log('Team API response:', response);
+        console.log('Team members:', teamData);
         if (mounted) {
-          setTeamMembers(response?.teamMembers || []);
+          setTeamMembers(teamData);
         }
-      } catch {
+      } catch (error) {
+        console.error('Team fetch error:', error);
         if (mounted) {
           setTeamMembers([]);
         }
@@ -32,10 +35,21 @@ export default function About() {
 
     loadTeam();
 
+    const refreshOnFocus = () => {
+      loadTeam();
+    };
+
+    // Auto-refresh frequently so CRM changes show up quickly.
+    const interval = setInterval(loadTeam, 5000);
+    window.addEventListener('focus', refreshOnFocus);
+
     return () => {
       mounted = false;
+      clearInterval(interval);
+      window.removeEventListener('focus', refreshOnFocus);
     };
   }, []);
+
 
   return (
     <>
@@ -46,7 +60,7 @@ export default function About() {
         image="/about.jpg"
       />
       <AboutSection />
-      {loading ? <Loader label="Loading team" /> : <TeamSection teamMembers={teamMembers.length ? teamMembers : fallbackTeam} />}
+      {loading ? <Loader label="Loading team" /> : <TeamSection teamMembers={teamMembers} />}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { navLinks, socialLinks } from '../data/siteData';
+import { contactMethods, socialLinks } from '../data/siteData';
 import logo from '../assets/logo.png';
 
 const quickLinks = [
@@ -73,13 +73,14 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="footer__heading">Navigation</h4>
+            <h4 className="footer__heading">Contact Details</h4>
             <ul className="footer__list">
-              {navLinks.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to} onClick={handleScrollToTop}>{item.label}</Link>
+              {contactMethods.map((item) => (
+                <li key={item.title}>
+                  <a href={item.link}>{item.title}: {item.value}</a>
                 </li>
               ))}
+              <li>Hours: Mon-Fri 09:00-18:00</li>
             </ul>
           </div>
         </div>

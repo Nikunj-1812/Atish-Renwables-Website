@@ -157,9 +157,14 @@ export default function TeamPage() {
                 <img src={member.imageUrl} alt={member.name} className="h-40 w-40 rounded-2xl object-cover" loading="lazy" />
               </div>
               <div className="grid gap-3 p-5">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900">{member.name}</h3>
-                  <p className="mt-1 text-sm text-slate-500">{member.role}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900">{member.name}</h3>
+                    <p className="mt-1 text-sm text-slate-500">{member.role}</p>
+                  </div>
+                  {member.isDefault && (
+                    <span className="flex-shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 whitespace-nowrap">Default</span>
+                  )}
                 </div>
 
                 <a

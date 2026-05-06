@@ -51,6 +51,10 @@ const projectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isDefault: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now,

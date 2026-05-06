@@ -3,17 +3,15 @@ import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Star } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import Button from './Button';
-import { featuredProject, projectFilters, projects } from '../data/siteData';
+import { projectFilters } from '../data/siteData';
 import { sectionMotion, staggerContainer, staggerItem } from '../utils/motion';
+import ImageCard from './ImageCard';
 
 function ProjectsSection({ projectData }) {
   const [activeFilter, setActiveFilter] = useState('All');
 
-  const allProjects = projectData?.length
-    ? projectData
-    : projects;
-
-  const featured = allProjects.find((p) => p.isMegaProject) || featuredProject;
+  const allProjects = projectData || [];
+  const featured = allProjects.find((p) => p.isMegaProject) || null;
 
   const visibleProjects = useMemo(() => {
     const regularProjects = allProjects.filter((project) => !project.isMegaProject);
@@ -52,31 +50,28 @@ function ProjectsSection({ projectData }) {
         <motion.article className="panel" style={{ padding: 0, overflow: 'visible', marginBottom: 28 }} {...sectionMotion}>
           <div className="split split--2" style={{ gap: 0 }}>
             <div className="media-frame media-frame--cover" style={{ minHeight: 360, borderRadius: 0 }}>
-              <img
-                className="media-frame__img"
-                alt={featured?.projectName || featuredProject?.title}
-                src={featured?.imageUrl || featuredProject?.image}
-                loading="lazy"
-              />
+              {featured ? (
+                <ImageCard src={featured.imageUrl} alt={featured.projectName} height="h-64" />
+              ) : null}
             </div>
             <div style={{ padding: 28, display: 'grid', gap: 16, alignContent: 'center' }}>
               <span className="pill" style={{ width: 'fit-content', background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
                 <Star size={16} /> Featured Installation
               </span>
                 <h3 className="section-title" style={{ textAlign: 'left', fontSize: 'clamp(1.7rem, 3vw, 2.6rem)' }}>
-                {featured?.projectName || featuredProject?.title}
+                {featured?.projectName || 'No featured project available'}
               </h3>
               <div style={{ display: 'inline-flex', gap: 8, alignItems: 'center', color: 'var(--muted)' }}>
                 <MapPin size={16} />
-                {featured?.location || featuredProject?.location}
+                {featured?.location || 'Add a featured project in CRM'}
               </div>
-              <p className="text-muted">{featured?.description || featuredProject?.text}</p>
+              <p className="text-muted">{featured?.description || 'The featured project will appear here once one is marked as Mega Project in CRM.'}</p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <span className="pill" style={{ background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
-                  {featured?.category || featuredProject?.category}
+                  {featured?.category || 'Featured'}
                 </span>
                 <span className="pill" style={{ background: 'rgba(253,188,19,0.18)', color: 'var(--accent-ink)' }}>
-                  {featured?.systemSizeKw ? `${featured.systemSizeKw} kW` : featuredProject?.size}
+                  {featured?.systemSizeKw ? `${featured.systemSizeKw} kW` : '—'}
                 </span>
               </div>
               <div style={{ marginTop: 8 }}>
@@ -89,11 +84,18 @@ function ProjectsSection({ projectData }) {
           </div>
         </motion.article>
 
-        <motion.div className="project-grid block" variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+        <motion.div
+          className="project-grid block"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          style={visibleProjects && visibleProjects.length <= 2 ? { justifyContent: 'center' } : undefined}
+        >
           {visibleProjects?.length > 0 ? visibleProjects.map((project) => (
             <motion.article key={project._id || project.title} className="project-card card-hover" variants={staggerItem}>
               <div className="project-card__media card-media">
-                <img alt={project.projectName || project.title} src={project.imageUrl || project.image} loading="lazy" />
+                <ImageCard src={project.imageUrl || project.image} alt={project.projectName || project.title} height="h-56" />
                 <div className="pill" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.88)' }}>
                   {project.category}
                 </div>

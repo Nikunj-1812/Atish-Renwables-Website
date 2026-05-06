@@ -22,6 +22,10 @@ const teamSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    isDefault: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: {
       type: Date,
       default: Date.now,

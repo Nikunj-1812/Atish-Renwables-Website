@@ -33,14 +33,46 @@ export default function ContactForm() {
     setLoading(true);
     setError(null);
 
+    // Basic frontend validation & sanitization
+    const sanitize = (s) => (typeof s === 'string' ? s.trim() : s);
+    const name = sanitize(formValues.name);
+    const phone = sanitize(formValues.phone);
+    const email = sanitize(formValues.email);
+    const city = sanitize(formValues.city);
+    const bill = formValues.bill ? Number(formValues.bill) : undefined;
+    const message = sanitize(formValues.message);
+
+    if (!name || name.length < 2) {
+      setError('Please provide a valid name.');
+      setLoading(false);
+      return;
+    }
+    const phonePattern = /^[+0-9\s-]{7,20}$/;
+    if (!phone || !phonePattern.test(phone)) {
+      setError('Please provide a valid phone number.');
+      setLoading(false);
+      return;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailPattern.test(email)) {
+      setError('Please provide a valid email address.');
+      setLoading(false);
+      return;
+    }
+    if (!city) {
+      setError('Please provide your city or location.');
+      setLoading(false);
+      return;
+    }
+
     const payload = {
-      name: formValues.name,
-      phone: formValues.phone,
-      email: formValues.email,
-      city: formValues.city,
-      requirement: requirement,
-      ...(formValues.bill && { monthlyBill: parseFloat(formValues.bill) }),
-      ...(formValues.message && { message: formValues.message }),
+      name,
+      phone,
+      email,
+      city,
+      requirement,
+      ...(typeof bill === 'number' && !Number.isNaN(bill) && { monthlyBill: bill }),
+      ...(message && { message }),
     };
 
     const result = await submitContactForm(payload);

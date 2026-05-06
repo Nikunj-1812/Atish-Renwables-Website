@@ -6,12 +6,15 @@ import CTA from './components/CTA';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Projects from './pages/Projects';
-import CalculatorPage from './pages/Calculator';
-import Contact from './pages/Contact';
-import About from './pages/About';
+import Loader from './components/Loader';
+import React, { Suspense, lazy } from 'react';
+
+const Home = lazy(() => import('./pages/Home'));
+const Services = lazy(() => import('./pages/Services'));
+const Projects = lazy(() => import('./pages/Projects'));
+const CalculatorPage = lazy(() => import('./pages/Calculator'));
+const Contact = lazy(() => import('./pages/Contact'));
+const About = lazy(() => import('./pages/About'));
 import introLogo from './assets/mainlogo.png';
 
 function Layout() {
@@ -72,7 +75,9 @@ function Layout() {
             exit={pageMotion.exit}
             transition={pageMotion.transition}
           >
-            <Outlet />
+            <Suspense fallback={<Loader fullPage label="Loading page..." />}>
+              <Outlet />
+            </Suspense>
           </motion.main>
         </AnimatePresence>
         <CTA />

@@ -3,11 +3,11 @@ import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import Button from './Button';
-import { team } from '../data/siteData';
 import { sectionMotion, staggerContainer, staggerItem, hoverLift } from '../utils/motion';
+import ImageCard from './ImageCard';
 
 function TeamSection({ teamMembers }) {
-  const visibleTeam = teamMembers?.length ? teamMembers : team;
+  const visibleTeam = teamMembers || [];
 
   return (
     <motion.section className="section" {...sectionMotion}>
@@ -18,11 +18,17 @@ function TeamSection({ teamMembers }) {
           copy="The company is led by specialists who understand design quality, delivery discipline, and what long-term support actually requires."
         />
 
-        <motion.div className="team-grid" variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.2 }}>
+        <motion.div
+          className="team-grid"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {visibleTeam.map((member) => (
             <motion.article key={member._id || member.name} className="team-card card-hover" variants={staggerItem}>
               <div className="team-card__media team-card__media--square">
-                <img alt={member.name} src={member.imageUrl || member.image} loading="lazy" />
+                <ImageCard src={member.imageUrl || member.image} alt={member.name} height="h-40" className="rounded-full" />
               </div>
               <div className="team-card__body">
                 <h3 className="team-card__title">{member.name}</h3>

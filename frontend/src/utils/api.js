@@ -77,7 +77,8 @@ export async function calculateSolarEstimate(payload) {
 }
 
 export async function getProjects() {
-  return apiCall('/projects');
+  // Add timestamp to prevent caching
+  return apiCall(`/projects?t=${Date.now()}`);
 }
 
 export async function getServices() {
@@ -85,5 +86,6 @@ export async function getServices() {
 }
 
 export async function getTeam() {
-  return apiCall('/team');
+  // Add timestamp to prevent caching
+  return apiCall(`/team?t=${Date.now()}`);
 }

@@ -14,6 +14,7 @@ const normalizeTeamMember = (member) => ({
   role: member.role,
   imageUrl: member.imageUrl,
   virtualCardLink: member.virtualCardLink || '',
+  isDefault: Boolean(member.isDefault),
   createdAt: member.createdAt,
 });
 

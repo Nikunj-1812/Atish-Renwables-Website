@@ -184,6 +184,9 @@ export default function ProjectsPage() {
             <div className="grid content-center gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">Mega Project</span>
+                {featuredProject.isDefault && (
+                  <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Default</span>
+                )}
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">{featuredProject.category}</span>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">{featuredProject.systemSizeKw} kW</span>
               </div>
@@ -192,6 +195,24 @@ export default function ProjectsPage() {
               <p className="text-sm leading-6 text-slate-600">{featuredProject.description}</p>
               <div className="flex flex-wrap gap-2 text-sm text-slate-500">
                 <span className="rounded-lg bg-slate-50 px-3 py-2">Case Study: {featuredProject.caseStudy || 'Not Available'}</span>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => openEditModal(featuredProject)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  <Edit3 size={14} />
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(featuredProject)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                >
+                  <Trash2 size={14} />
+                  Delete
+                </button>
               </div>
             </div>
           </div>
@@ -207,9 +228,14 @@ export default function ProjectsPage() {
                 <span className="absolute right-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700">{project.category}</span>
               </div>
               <div className="grid gap-3 p-5">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900">{project.projectName}</h3>
-                  <p className="mt-1 text-sm text-slate-500">{project.location}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-lg font-semibold text-slate-900">{project.projectName}</h3>
+                    <p className="mt-1 text-sm text-slate-500">{project.location}</p>
+                  </div>
+                  {project.isDefault && (
+                    <span className="flex-shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 whitespace-nowrap">Default</span>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between text-sm text-slate-500">

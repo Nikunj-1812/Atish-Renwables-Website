@@ -15,7 +15,8 @@ export default function App() {
   return (
     <Suspense fallback={<Loader fullPage label="Loading admin panel" />}>
       <Routes>
-        <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/admin/login" replace />} />
+        <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
         <Route path="/admin/login" element={<LoginPage />} />
 
         <Route

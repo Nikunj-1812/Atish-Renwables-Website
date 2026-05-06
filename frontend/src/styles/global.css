@@ -830,8 +830,9 @@ main {
 }
 
 .team-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 268px));
   gap: 28px;
+  justify-content: center;
   justify-items: center;
 }
 

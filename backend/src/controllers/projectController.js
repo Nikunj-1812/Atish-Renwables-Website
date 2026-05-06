@@ -20,6 +20,7 @@ const normalizeProject = (project) => ({
   description: project.description,
   caseStudy: project.caseStudy || '',
   isMegaProject: Boolean(project.isMegaProject),
+  isDefault: Boolean(project.isDefault),
   createdAt: project.createdAt,
 });
 

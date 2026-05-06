@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import HeroSection from '../components/HeroSection';
 import ProjectsSection from '../components/ProjectsSection';
 import Loader from '../components/Loader';
@@ -50,18 +51,26 @@ export default function Projects() {
 
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: 0.08 }}
+    >
       <HeroSection
         eyebrow="Portfolio"
         title="Our solar projects"
         copy="A curated look at installations delivered for industrial, commercial, and residential clients across India."
         image="/projects.jpg"
       />
-      {loading || !projects ? (
-        <Loader label="Loading projects" />
-      ) : (
-        <ProjectsSection projectData={projects} />
-      )}
-    </>
+      <div className="content-area-wrapper" style={{ minHeight: '100vh' }}>
+        {loading || !projects ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+            <Loader fullPage label="Loading projects" />
+          </div>
+        ) : (
+          <ProjectsSection projectData={projects} />
+        )}
+      </div>
+    </motion.div>
   );
 }

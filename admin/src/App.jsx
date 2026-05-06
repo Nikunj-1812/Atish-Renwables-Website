@@ -3,13 +3,29 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Loader from './components/Loader';
 
-const LoginPage = lazy(() => import('./pages/LoginPage'));
-const DashboardPage = lazy(() => import('./pages/DashboardPage'));
-const LeadsPage = lazy(() => import('./pages/LeadsPage'));
-const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
-const TeamPage = lazy(() => import('./pages/TeamPage'));
-const SettingsPage = lazy(() => import('./pages/SettingsPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const adminPages = {
+  '/admin/login': () => import('./pages/LoginPage'),
+  '/admin/dashboard': () => import('./pages/DashboardPage'),
+  '/admin/leads': () => import('./pages/LeadsPage'),
+  '/admin/projects': () => import('./pages/ProjectsPage'),
+  '/admin/team': () => import('./pages/TeamPage'),
+  '/admin/settings': () => import('./pages/SettingsPage'),
+  '*': () => import('./pages/NotFoundPage'),
+};
+
+const LoginPage = lazy(adminPages['/admin/login']);
+const DashboardPage = lazy(adminPages['/admin/dashboard']);
+const LeadsPage = lazy(adminPages['/admin/leads']);
+const ProjectsPage = lazy(adminPages['/admin/projects']);
+const TeamPage = lazy(adminPages['/admin/team']);
+const SettingsPage = lazy(adminPages['/admin/settings']);
+const NotFoundPage = lazy(adminPages['*']);
+
+export const prefetchAdminRoute = (path) => {
+  if (adminPages[path]) {
+    adminPages[path]();
+  }
+};
 
 export default function App() {
   return (

@@ -18,8 +18,8 @@ export default function HeroSection({
         <img
           alt="Solar installation"
           src={image}
-          loading="lazy"
-          style={{ objectPosition: 'center' }}
+          fetchpriority="high"
+          style={{ objectPosition: 'center', width: '100%', height: '100%' }}
           onError={(e) => {
             // fallback to an inline SVG if remote image is blocked or fails
             e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"><rect width="100%" height="100%" fill="%23005058"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="36" fill="%23fff">Image unavailable</text></svg>';

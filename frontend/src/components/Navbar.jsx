@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Menu, Phone, X } from 'lucide-react';
 import { NavLink, Link } from 'react-router-dom';
 import Button from './Button';
+import { prefetchRoute } from '../App';
 import { navLinks } from '../data/siteData';
 import logo from '../assets/logo.png';
 
@@ -10,7 +11,8 @@ export default function Navbar() {
 
   const handleLinkClick = () => {
     setMenuOpen(false);
-    window.scrollTo(0, 0);
+    // Let Framer Motion's exit animation start before scrolling to top
+    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   return (
@@ -32,6 +34,7 @@ export default function Navbar() {
                 className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 to={item.to}
                 onClick={handleLinkClick}
+                onMouseEnter={() => prefetchRoute(item.to)}
               >
                 {item.label}
               </NavLink>
@@ -39,7 +42,7 @@ export default function Navbar() {
           </nav>
 
           <div className="navbar__actions">
-            <Button to="/contact" variant="accent" onClick={handleLinkClick}>
+            <Button to="/contact" variant="accent" onClick={handleLinkClick} onMouseEnter={() => prefetchRoute('/contact')}>
               <Phone size={16} />
               Get a Quote
             </Button>
@@ -62,6 +65,7 @@ export default function Navbar() {
               className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
               to={item.to}
               onClick={handleLinkClick}
+              onMouseEnter={() => prefetchRoute(item.to)}
             >
               {item.label}
             </NavLink>

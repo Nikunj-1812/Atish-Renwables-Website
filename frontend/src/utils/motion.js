@@ -1,10 +1,10 @@
-const DEFAULT_DURATION = 0.7;
-const DEFAULT_EASE = 'easeOut';
+const DEFAULT_DURATION = 0.4;
+const DEFAULT_EASE = [0.4, 0, 0.2, 1]; // standard material design ease
 
 export const pageMotion = {
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 15 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -12 },
+  exit: { opacity: 0, y: -10 },
   transition: { duration: DEFAULT_DURATION, ease: DEFAULT_EASE },
 };
 

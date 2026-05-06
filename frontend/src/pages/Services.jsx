@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import HeroSection from '../components/HeroSection';
 import EPCServicesSection from '../components/EPCServicesSection';
 import ServicesSection from '../components/ServicesSection';
@@ -41,15 +42,27 @@ export default function Services() {
   }, []);
 
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: 0.08 }}
+    >
       <HeroSection
         eyebrow="Services"
         title="Our solar services"
         copy="Industrial EPC, commercial rooftops, and residential solutions designed for efficiency, reliability, and long-term savings."
         image="/service.jpg"
       />
-      {loading || !servicesData ? <Loader label="Loading services" /> : <EPCServicesSection servicesData={servicesData} />}
+      <div className="content-area-wrapper" style={{ minHeight: '60vh' }}>
+        {loading || !servicesData ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+            <Loader fullPage label="Loading services" />
+          </div>
+        ) : (
+          <EPCServicesSection servicesData={servicesData} />
+        )}
+      </div>
       <ServicesSection />
-    </>
+    </motion.div>
   );
 }

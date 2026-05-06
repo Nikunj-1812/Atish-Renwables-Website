@@ -1,5 +1,6 @@
 import { BarChart3, FolderKanban, Settings, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { prefetchAdminRoute } from '../App';
 
 const links = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: BarChart3 },
@@ -27,6 +28,7 @@ export default function Sidebar() {
             <NavLink
               key={item.to}
               to={item.to}
+              onMouseEnter={() => prefetchAdminRoute(item.to)}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition ${
                   isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'

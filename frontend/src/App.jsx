@@ -9,12 +9,27 @@ import ScrollToTop from './components/ScrollToTop';
 import Loader from './components/Loader';
 import React, { Suspense, lazy } from 'react';
 
-const Home = lazy(() => import('./pages/Home'));
-const Services = lazy(() => import('./pages/Services'));
-const Projects = lazy(() => import('./pages/Projects'));
-const CalculatorPage = lazy(() => import('./pages/Calculator'));
-const Contact = lazy(() => import('./pages/Contact'));
-const About = lazy(() => import('./pages/About'));
+const pages = {
+  '/': () => import('./pages/Home'),
+  '/services': () => import('./pages/Services'),
+  '/projects': () => import('./pages/Projects'),
+  '/calculator': () => import('./pages/Calculator'),
+  '/contact': () => import('./pages/Contact'),
+  '/about': () => import('./pages/About'),
+};
+
+const Home = lazy(pages['/']);
+const Services = lazy(pages['/services']);
+const Projects = lazy(pages['/projects']);
+const CalculatorPage = lazy(pages['/calculator']);
+const Contact = lazy(pages['/contact']);
+const About = lazy(pages['/about']);
+
+export const prefetchRoute = (path) => {
+  if (pages[path]) {
+    pages[path]();
+  }
+};
 import introLogo from './assets/mainlogo.png';
 
 function Layout() {
@@ -65,7 +80,13 @@ function Layout() {
         ) : null}
       </AnimatePresence>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: showIntro ? 0 : 1 }} transition={{ duration: 0.7, ease: 'easeOut', delay: showIntro ? 0 : 0.05 }}>
+      <motion.div 
+        className="app-main-wrapper"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: showIntro ? 0 : 1 }} 
+        transition={{ duration: 0.5, ease: 'easeOut', delay: showIntro ? 0 : 0.05 }}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+      >
         <Navbar />
         <AnimatePresence mode="wait">
           <motion.main
@@ -74,8 +95,9 @@ function Layout() {
             animate={pageMotion.animate}
             exit={pageMotion.exit}
             transition={pageMotion.transition}
+            style={{ flex: 1, willChange: 'transform, opacity', transform: 'translateZ(0)' }}
           >
-            <Suspense fallback={<Loader fullPage label="Loading page..." />}>
+            <Suspense fallback={<Loader fullPage label="Loading..." />}>
               <Outlet />
             </Suspense>
           </motion.main>

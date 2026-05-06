@@ -9,6 +9,7 @@ export default function CalculatorPage() {
         title="Solar savings calculator"
         copy="Estimate system size, cost, savings, and payback period before you request a site survey."
         image="/calculator.jpg"
+        priority
       />
       <Calculator />
     </>

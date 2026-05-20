@@ -53,5 +53,5 @@ export default function ParallaxImage({ src, alt = '', className = '', speed = 0
     };
   }, [speed, shouldReduceMotion]);
 
-  return <img ref={ref} src={src} alt={alt} className={className} loading="lazy" />;
+  return <img ref={ref} src={src} alt={alt} className={className} loading="lazy" decoding="async" />;
 }

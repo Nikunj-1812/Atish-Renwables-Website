@@ -51,7 +51,8 @@ export default function Services() {
         eyebrow="Services"
         title="Our solar services"
         copy="Industrial EPC, commercial rooftops, and residential solutions designed for efficiency, reliability, and long-term savings."
-        image="/service.jpg"
+        image="/service.webp"
+        isHomePage={false}
       />
       <div className="content-area-wrapper" style={{ minHeight: '60vh' }}>
         {loading || !servicesData ? (

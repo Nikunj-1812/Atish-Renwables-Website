@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 import Button from './Button';
 import { prefetchRoute } from '../App';
 import { navLinks } from '../data/siteData';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.webp';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="container">
         <div className="navbar__inner">
           <Link className="brand" to="/" onClick={handleLinkClick}>
-            <img src={logo} alt="ATISH RENEWABLES" className="brand__logo" />
+            <img src={logo} alt="ATISH RENEWABLES" className="brand__logo" loading="eager" fetchPriority="high" decoding="async" />
             <span className="brand__copy">
               <span className="brand__name">ATISH RENEWABLES</span>
               <span className="brand__tagline">Raise Your <span>Green Energy</span></span>

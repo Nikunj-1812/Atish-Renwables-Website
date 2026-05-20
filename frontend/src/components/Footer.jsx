@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { contactMethods, socialLinks } from '../data/siteData';
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.webp';
 
 const quickLinks = [
   { label: 'Projects', to: '/projects' },
@@ -31,7 +31,7 @@ export default function Footer() {
         <div className="footer__top">
           <div className="footer__brand">
             <div className="footer__title">
-              <img src={logo} alt="ATISH RENEWABLES" className="brand__logo" />
+              <img src={logo} alt="ATISH RENEWABLES" className="brand__logo" loading="lazy" decoding="async" />
               <span className="footer__brand-copy">
                 <strong className="footer__brand-name">ATISH RENEWABLES</strong>
                 <span className="footer__tagline">Raise Your Green Energy</span>

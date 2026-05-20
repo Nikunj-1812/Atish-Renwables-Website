@@ -47,18 +47,18 @@ function ProjectsSection({ projectData }) {
           ))}
         </motion.div>
 
-        <motion.article className="panel" style={{ padding: 0, overflow: 'visible', marginBottom: 28 }} {...sectionMotion}>
-          <div className="split split--2" style={{ gap: 0 }}>
-            <div className="media-frame media-frame--cover" style={{ minHeight: 360, borderRadius: 0 }}>
+        <motion.article className="panel featured-project-card" style={{ padding: 16, overflow: 'visible', marginBottom: 28 }} {...sectionMotion}>
+          <div className="split featured-split" style={{ gap: 0 }}>
+            <div className="media-frame media-frame--cover featured-media" >
               {featured ? (
                 <ImageCard src={featured.imageUrl} alt={featured.projectName} height="h-64" />
               ) : null}
             </div>
-            <div style={{ padding: 28, display: 'grid', gap: 16, alignContent: 'center' }}>
+            <div className="featured-project__content" style={{ padding: '24px 32px', display: 'grid', gap: 12, alignContent: 'center' }}>
               <span className="pill" style={{ width: 'fit-content', background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
                 <Star size={16} /> Featured Installation
               </span>
-                <h3 className="section-title" style={{ textAlign: 'left', fontSize: 'clamp(1.7rem, 3vw, 2.6rem)' }}>
+                <h3 className="section-title featured-project__title" style={{ textAlign: 'left' }}>
                 {featured?.projectName || 'No featured project available'}
               </h3>
               <div style={{ display: 'inline-flex', gap: 8, alignItems: 'center', color: 'var(--muted)' }}>
@@ -75,7 +75,7 @@ function ProjectsSection({ projectData }) {
                 </span>
               </div>
               <div style={{ marginTop: 8 }}>
-                <Button to="/projects" variant="secondary">
+                <Button to={featured?._id ? `/projects/${featured._id}` : '/projects'} variant="secondary">
                   View Case Study
                   <ArrowRight size={16} />
                 </Button>
@@ -85,12 +85,11 @@ function ProjectsSection({ projectData }) {
         </motion.article>
 
         <motion.div
-          className="project-grid block"
+          className={`project-grid block ${visibleProjects && visibleProjects.length <= 2 ? 'project-grid--center' : ''}`}
           variants={staggerContainer}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          style={visibleProjects && visibleProjects.length <= 2 ? { justifyContent: 'center' } : undefined}
         >
           {visibleProjects?.length > 0 ? visibleProjects.map((project) => (
             <motion.article key={project._id || project.title} className="project-card card-hover" variants={staggerItem}>
@@ -115,9 +114,14 @@ function ProjectsSection({ projectData }) {
                       {project.systemSizeKw ? `${project.systemSizeKw} kW` : project.size}
                     </div>
                   </div>
-                  <div className="icon-badge">
+                  <Button
+                    to={project._id ? `/projects/${project._id}` : '/projects'}
+                    variant="secondary"
+                    className="project-card__cta"
+                    aria-label={`Open ${project.projectName || project.title} case study`}
+                  >
                     <ArrowRight size={18} />
-                  </div>
+                  </Button>
                 </div>
               </div>
             </motion.article>

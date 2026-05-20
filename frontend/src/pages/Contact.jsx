@@ -8,7 +8,8 @@ export default function Contact() {
         eyebrow="Contact"
         title="Get in touch"
         copy="Tell us your solar requirement and the team will respond with the right next step, whether it is a residential rooftop or a large EPC project."
-        image="/contact.jpg"
+        image="/contact.webp"
+        isHomePage={false}
         priority
       />
       <ContactForm />

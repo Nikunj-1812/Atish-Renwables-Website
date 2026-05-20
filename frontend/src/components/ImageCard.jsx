@@ -7,6 +7,7 @@ function ImageCard({ src, alt, className = '', height = 'h-56' }) {
         src={src}
         alt={alt}
         loading="lazy"
+        decoding="async"
         className="w-full h-full object-cover block"
         draggable={false}
       />

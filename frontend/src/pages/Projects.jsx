@@ -60,7 +60,8 @@ export default function Projects() {
         eyebrow="Portfolio"
         title="Our solar projects"
         copy="A curated look at installations delivered for industrial, commercial, and residential clients across India."
-        image="/projects.jpg"
+        image="/projects.webp"
+        isHomePage={false}
       />
       <div className="content-area-wrapper" style={{ minHeight: '100vh' }}>
         {loading || !projects ? (

@@ -8,18 +8,18 @@ import { aboutHighlights } from '../data/siteData';
 
 export default function AboutSection() {
   return (
-    <motion.section className="section" {...sectionMotion}>
+    <motion.section className="section about-section" {...sectionMotion}>
       <div className="container">
         <div className="split split--2">
-          <motion.div className="media-frame" {...hoverLift} {...mediaHover}>
+          <div className="about-media">
             <ParallaxImage
               alt="Solar installation"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ6eAD7xPCgr2LLyDYLIFbNAtwM0SCtrEPKrZ8uSwDiMN2yWS1VH8a_d8Ta4LQRr_6qKHg2jGToBuIOP5CEekOxcU4kY2LT4GXzHpgLUNHhLIjvsEf1-qEOXNgt7t_TXgjEAZ9-2FhZjyp0C3DIynoF0IzxwoI0CHIi14paXb5nKq63RQEILRguDUEkZO1rWzRKASqzPaQAN5JkjFQQBxmsCXAIUychohNqC0noZIosMZSZVgN76uiLOa7us1Fk4NIbbDtSc6EtA8H"
-              className="media-frame__img"
+              className="about-media__img"
             />
-          </motion.div>
+          </div>
 
-          <div>
+          <div className="about-content">
             <SectionHeading
               align="left"
               eyebrow="About us"
@@ -38,7 +38,7 @@ export default function AboutSection() {
               ))}
             </motion.div>
 
-            <div style={{ marginTop: 24 }}>
+            <div style={{ marginTop: 24 }} className="about-cta">
               <Button to="/about" variant="secondary">
                 Learn More
               </Button>

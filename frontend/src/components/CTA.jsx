@@ -4,25 +4,9 @@ import Button from './Button';
 import { hoverLift } from '../utils/motion';
 
 export default function CTA() {
-  // Prefer a local image at /ready-hero.png if present; otherwise leave layout unchanged
-  const localImage = '/ready-hero.png';
   const style = {
     background: 'linear-gradient(135deg, #005058, #0f6a73 56%, #3f4b43)'
   };
-
-  try {
-    // in browser this will always succeed; during build the file may 404 — we rely on browser fallback
-    const img = new Image();
-    img.src = localImage;
-    img.onload = () => {
-      // apply background image only if loaded successfully
-      style.background = `url(${localImage}), linear-gradient(135deg, #005058, #0f6a73 56%, #3f4b43)`;
-      style.backgroundSize = 'cover';
-      style.backgroundPosition = 'center';
-    };
-  } catch (e) {
-    // ignore
-  }
 
   return (
     <section className="cta">

@@ -21,6 +21,7 @@ const pages = {
 const Home = lazy(pages['/']);
 const Services = lazy(pages['/services']);
 const Projects = lazy(pages['/projects']);
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'));
 const CalculatorPage = lazy(pages['/calculator']);
 const Contact = lazy(pages['/contact']);
 const About = lazy(pages['/about']);
@@ -30,14 +31,14 @@ export const prefetchRoute = (path) => {
     pages[path]();
   }
 };
-import introLogo from './assets/mainlogo.png';
+import introLogo from './assets/mainlogo.webp';
 
 function Layout() {
   const location = useLocation();
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setShowIntro(false), 2050);
+    const timer = window.setTimeout(() => setShowIntro(false), 5200);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -65,30 +66,24 @@ function Layout() {
               className="intro-overlay__logo"
               initial={{ scale: 0.9, opacity: 0, filter: 'blur(0px) brightness(1)' }}
               animate={{
-                scale: [0.9, 1, 1.2, 1.7],
+                scale: [0.9, 1, 1, 1.7],
                 opacity: [0, 1, 1, 0],
                 filter: [
                   'blur(0px) brightness(1)',
                   'blur(0px) brightness(1)',
-                  'blur(6px) brightness(1.05)',
+                  'blur(0px) brightness(1)',
                   'blur(16px) brightness(1)',
                 ],
               }}
-              transition={{ duration: 1.75, delay: 0.25, ease: [0.4, 0, 0.2, 1], times: [0, 0.35, 0.68, 1] }}
+              transition={{ duration: 4.5, delay: 0.25, ease: [0.4, 0, 0.2, 1], times: [0, 0.18, 0.52, 1] }}
             />
           </motion.div>
         ) : null}
       </AnimatePresence>
 
-      <motion.div 
-        className="app-main-wrapper"
-        initial={{ opacity: 0 }} 
-        animate={{ opacity: showIntro ? 0 : 1 }} 
-        transition={{ duration: 0.5, ease: 'easeOut', delay: showIntro ? 0 : 0.05 }}
-        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
-      >
+      <div className="app-main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <motion.main
             key={location.pathname}
             initial={pageMotion.initial}
@@ -104,7 +99,7 @@ function Layout() {
         </AnimatePresence>
         <CTA />
         <Footer />
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -116,6 +111,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:projectId" element={<ProjectDetail />} />
         <Route path="/calculator" element={<CalculatorPage />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />

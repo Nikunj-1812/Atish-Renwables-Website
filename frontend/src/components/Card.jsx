@@ -5,7 +5,7 @@ export default function Card({ className = '', media, mediaAlt = '', children, m
     <article className={`card ${className}`.trim()}>
       {media ? (
         <div className={`card__media ${mediaClass}`}>
-          <img src={media} alt={mediaAlt} loading="lazy" />
+          <img src={media} alt={mediaAlt} loading="lazy" decoding="async" />
         </div>
       ) : null}
       <div className="card__body">{children}</div>

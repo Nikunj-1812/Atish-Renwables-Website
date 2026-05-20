@@ -1,6 +1,6 @@
 const parseAllowedOrigins = (value) => {
 	if (!value) {
-		return ['http://localhost:3000', 'http://localhost:5173'];
+		return ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000'];
 	}
 
 	return value

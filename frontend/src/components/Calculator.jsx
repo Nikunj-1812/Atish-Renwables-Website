@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calculator as CalculatorIcon, Info, Leaf, MapPin, PanelTop, Phone, User, Wallet, Zap } from 'lucide-react';
+import { Calculator as CalculatorIcon, Info, MapPin, PanelTop, Phone, User, Wallet, Zap } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import { calculatorResults } from '../data/siteData';
 import { sectionMotion, staggerContainer, staggerItem, hoverLift } from '../utils/motion';
@@ -36,8 +36,6 @@ export default function Calculator() {
   const totalCost = systemSize * calculatorResults.baseCostPerKw;
   const savings = billValue * 0.9;
   const yearlySavings = savings * 12;
-  const payback = totalCost / yearlySavings;
-  const co2Reduction = systemSize * 1.25;
 
   // Use backend results if available, otherwise use local calculations
   const displayResults = results || {
@@ -45,8 +43,6 @@ export default function Calculator() {
     totalCost,
     monthlySavings: savings,
     yearlySavings,
-    paybackPeriod: payback,
-    co2Reduction,
   };
 
   const resultItems = [
@@ -72,17 +68,6 @@ export default function Calculator() {
       value: formatCurrency(displayResults.yearlySavings),
       icon: Wallet,
       toneClass: 'calculator-result-value--accent',
-    },
-    {
-      label: 'Payback Period',
-      value: `${formatNumber(displayResults.paybackPeriod)} years`,
-      icon: CalculatorIcon,
-    },
-    {
-      label: 'CO2 Reduction',
-      value: `${formatNumber(displayResults.co2Reduction)} t/year`,
-      icon: Leaf,
-      toneClass: 'calculator-result-value--primary',
     },
   ];
 
@@ -120,8 +105,6 @@ export default function Calculator() {
         totalCost: estimate.totalCost,
         monthlySavings: estimate.monthlySavings,
         yearlySavings: estimate.yearlySavings,
-        paybackPeriod: estimate.paybackPeriodYears || estimate.paybackPeriod,
-        co2Reduction: systemSize * 1.25, // Calculate CO2 reduction locally
       });
       setShowResults(true);
     } else {

@@ -8,7 +8,8 @@ export default function CalculatorPage() {
         eyebrow="Savings"
         title="Solar savings calculator"
         copy="Estimate system size, cost, savings, and payback period before you request a site survey."
-        image="/calculator.jpg"
+        image="/calculator.webp"
+        isHomePage={false}
         priority
       />
       <Calculator />

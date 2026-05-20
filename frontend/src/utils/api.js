@@ -81,6 +81,10 @@ export async function getProjects() {
   return apiCall(`/projects?t=${Date.now()}`);
 }
 
+export async function getProjectById(projectId) {
+  return apiCall(`/projects/${projectId}`);
+}
+
 export async function getServices() {
   return apiCall('/services');
 }

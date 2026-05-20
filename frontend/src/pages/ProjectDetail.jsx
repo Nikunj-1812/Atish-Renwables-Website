@@ -1,0 +1,178 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft, CheckCircle2, MapPin, PanelTop, Share2, Sparkles } from 'lucide-react';
+import Loader from '../components/Loader';
+import Button from '../components/Button';
+import { getProjectById } from '../utils/api';
+
+const fallbackCaseStudy =
+  'This project was delivered with a focus on clean execution, durable system design, and long-term energy yield. The final installation balanced engineering quality, site constraints, and operational reliability.';
+
+const formatCategory = (value = '') => String(value || '').charAt(0).toUpperCase() + String(value || '').slice(1);
+
+export default function ProjectDetail() {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProject = async () => {
+      setLoading(true);
+      const response = await getProjectById(projectId);
+
+      if (!mounted) return;
+
+      if (response.success) {
+        setProject(response.data);
+      } else {
+        setProject(null);
+      }
+
+      setLoading(false);
+    };
+
+    loadProject();
+
+    return () => {
+      mounted = false;
+    };
+  }, [projectId]);
+
+  const caseStudy = project?.caseStudy?.trim() || fallbackCaseStudy;
+
+  const projectHighlights = useMemo(
+    () => [
+      { label: 'Location', value: project?.location || '—', icon: MapPin },
+      { label: 'System Size', value: project?.systemSizeKw ? `${project.systemSizeKw} kW` : '—', icon: PanelTop },
+      { label: 'Category', value: formatCategory(project?.category), icon: Sparkles },
+    ],
+    [project]
+  );
+
+  if (loading) {
+    return <Loader fullPage label="Loading project" />;
+  }
+
+  if (!project) {
+    return (
+      <section className="section">
+        <div className="container" style={{ textAlign: 'center' }}>
+          <p className="text-muted">Project not found.</p>
+          <Button to="/projects" variant="secondary">
+            <ArrowLeft size={16} />
+            Back to Projects
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <motion.section className="section" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}>
+      <div className="container">
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
+          <Button to="/projects" variant="secondary">
+            <ArrowLeft size={16} />
+            Back to Projects
+          </Button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigator?.share ? navigator.share({ title: project.projectName, text: project.description }) : null}
+          >
+            <Share2 size={16} />
+            Share Project
+          </button>
+        </div>
+
+        <article className="panel" style={{ overflow: 'hidden' }}>
+          <div className="split split--2" style={{ gap: 0, alignItems: 'stretch' }}>
+            <div className="media-frame media-frame--cover" style={{ minHeight: '100%', height: '100%' }}>
+              <img src={project.imageUrl} alt={project.projectName} loading="eager" fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+
+            <div style={{ padding: '28px 32px', display: 'grid', gap: 16, alignContent: 'start' }}>
+              <span className="pill" style={{ width: 'fit-content', background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
+                Featured Case Study
+              </span>
+
+              <h1 className="section-title" style={{ textAlign: 'left', fontSize: 'clamp(2rem, 3.4vw, 3rem)' }}>
+                {project.projectName}
+              </h1>
+
+              <div style={{ display: 'grid', gap: 12 }}>
+                <p className="text-muted" style={{ margin: 0 }}>
+                  {project.description}
+                </p>
+
+                <div style={{ display: 'grid', gap: 12 }}>
+                  {projectHighlights.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={item.label} className="stack-item" style={{ padding: '12px 16px' }}>
+                        <div className="stack-item__icon">
+                          <Icon size={18} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '.76rem', textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--muted)', fontWeight: 800 }}>
+                            {item.label}
+                          </div>
+                          <div style={{ fontWeight: 800 }}>{item.value}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <span className="pill" style={{ background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
+                  {project.city}
+                </span>
+                <span className="pill" style={{ background: 'rgba(253,188,19,0.18)', color: 'var(--accent-ink)' }}>
+                  {project.district}
+                </span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <section className="section section--tight" style={{ paddingBottom: 0 }}>
+          <div className="grid-responsive grid-2">
+            <article className="panel" style={{ padding: 28 }}>
+              <h2 className="service-card__title">Project Overview</h2>
+              <p className="text-muted" style={{ marginBottom: 0, lineHeight: 1.8 }}>
+                {project.description}
+              </p>
+            </article>
+
+            <article className="panel" style={{ padding: 28 }}>
+              <h2 className="service-card__title">Case Study</h2>
+              <p className="text-muted" style={{ marginBottom: 16, lineHeight: 1.8 }}>
+                {caseStudy}
+              </p>
+              <div className="stack" style={{ gap: 10 }}>
+                {[
+                  'Site survey and system sizing',
+                  'Layout planning and installation coordination',
+                  'Performance-optimized commissioning',
+                ].map((item) => (
+                  <div key={item} className="stack-item" style={{ padding: '10px 14px' }}>
+                    <div className="stack-item__icon" style={{ width: 36, height: 36 }}>
+                      <CheckCircle2 size={16} />
+                    </div>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </motion.section>
+  );
+}

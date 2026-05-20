@@ -1,4 +1,4 @@
-const DEFAULT_DURATION = 0.4;
+const DEFAULT_DURATION = 0.6;
 const DEFAULT_EASE = [0.4, 0, 0.2, 1]; // standard material design ease
 
 export const pageMotion = {

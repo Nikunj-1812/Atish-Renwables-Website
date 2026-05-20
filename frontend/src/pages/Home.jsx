@@ -12,7 +12,8 @@ export default function Home() {
         eyebrow="Solar EPC solutions"
         title={<>Switch to <span>Solar</span> &amp; save on electricity bills</>}
         copy="Empowering homes, businesses, and industrial facilities with high-performance solar engineering, transparent delivery, and measurable returns."
-        image="/home.jpg"
+        image="/home.webp"
+        isHomePage={true}
         actions={[
           { label: 'Get Free Quote', to: '/contact', variant: 'primary', icon: 'arrow' },
           { label: 'Calculate Savings', to: '/calculator', variant: 'secondary' },

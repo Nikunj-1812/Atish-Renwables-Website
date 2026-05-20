@@ -55,9 +55,10 @@ export default function About() {
     <>
       <HeroSection
         eyebrow="About"
-        title="About ATISH RENEWABLES"
+        title="About Atish Renewables"
         copy="A modern EPC team focused on sustainable solar delivery, long-term reliability, and practical engineering discipline."
-        image="/about.jpg"
+        image="/about.webp"
+        isHomePage={false}
       />
       <AboutSection />
       {loading ? <Loader label="Loading team" /> : <TeamSection teamMembers={teamMembers} />}

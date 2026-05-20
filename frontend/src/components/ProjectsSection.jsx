@@ -11,7 +11,15 @@ function ProjectsSection({ projectData }) {
   const [activeFilter, setActiveFilter] = useState('All');
 
   const allProjects = projectData || [];
-  const featured = allProjects.find((p) => p.isMegaProject) || null;
+  const megaProjects = useMemo(
+    () => allProjects.filter((project) => Boolean(project.isMegaProject)),
+    [allProjects]
+  );
+  const featured = megaProjects[0] || null;
+  const additionalMegaProjects = useMemo(
+    () => megaProjects.slice(1),
+    [megaProjects]
+  );
 
   const visibleProjects = useMemo(() => {
     const regularProjects = allProjects.filter((project) => !project.isMegaProject);
@@ -20,10 +28,20 @@ function ProjectsSection({ projectData }) {
       return regularProjects;
     }
 
+    if (activeFilter === 'Mega') {
+      // Show all projects flagged as mega/featured when Mega filter is selected
+      return megaProjects;
+    }
+
     return regularProjects.filter(
       (project) => String(project.category || '').toLowerCase() === activeFilter.toLowerCase()
     );
-  }, [activeFilter, allProjects]);
+  }, [activeFilter, allProjects, megaProjects]);
+
+  const showFeaturedCard = activeFilter !== 'Mega' && Boolean(featured);
+  const megaGridProjects = activeFilter === 'Mega' ? megaProjects : additionalMegaProjects;
+  const hasProjectsToRender =
+    visibleProjects.length > 0 || megaGridProjects.length > 0 || showFeaturedCard;
 
   return (
     <motion.section className="section" {...sectionMotion}>
@@ -47,7 +65,8 @@ function ProjectsSection({ projectData }) {
           ))}
         </motion.div>
 
-        <motion.article className="panel featured-project-card" style={{ padding: 16, overflow: 'visible', marginBottom: 28 }} {...sectionMotion}>
+        {showFeaturedCard ? (
+          <motion.article className="panel featured-project-card" style={{ padding: 16, overflow: 'visible', marginBottom: 28 }} {...sectionMotion}>
           <div className="split featured-split" style={{ gap: 0 }}>
             <div className="media-frame media-frame--cover featured-media" >
               {featured ? (
@@ -82,7 +101,55 @@ function ProjectsSection({ projectData }) {
               </div>
             </div>
           </div>
-        </motion.article>
+          </motion.article>
+        ) : null}
+
+        {megaGridProjects.length > 0 ? (
+          <motion.div
+            className={`project-grid block ${megaGridProjects.length <= 2 ? 'project-grid--center' : ''}`}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+            style={{ marginBottom: 28 }}
+          >
+            {megaGridProjects.map((project) => (
+              <motion.article key={project._id || project.title} className="project-card card-hover" variants={staggerItem}>
+                <div className="project-card__media card-media">
+                  <ImageCard src={project.imageUrl || project.image} alt={project.projectName || project.title} height="h-56" />
+                  <div className="pill" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(255,255,255,0.88)' }}>
+                    Mega Project
+                  </div>
+                </div>
+                <div className="project-card__body">
+                  <h3 className="project-card__title">{project.projectName || project.title}</h3>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', color: 'var(--muted)', marginBottom: 16 }}>
+                    <MapPin size={16} />
+                    {project.location}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 16, borderTop: '1px solid rgba(15,106,115,0.12)' }}>
+                    <div>
+                      <div style={{ fontSize: '.78rem', textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--muted)', fontWeight: 800 }}>
+                        System Size
+                      </div>
+                      <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.1rem', color: 'var(--primary-strong)', fontWeight: 800 }}>
+                        {project.systemSizeKw ? `${project.systemSizeKw} kW` : project.size}
+                      </div>
+                    </div>
+                    <Button
+                      to={project._id ? `/projects/${project._id}` : '/projects'}
+                      variant="secondary"
+                      className="project-card__cta"
+                      aria-label={`Open ${project.projectName || project.title} case study`}
+                    >
+                      <ArrowRight size={18} />
+                    </Button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        ) : null}
 
         <motion.div
           className={`project-grid block ${visibleProjects && visibleProjects.length <= 2 ? 'project-grid--center' : ''}`}
@@ -125,11 +192,11 @@ function ProjectsSection({ projectData }) {
                 </div>
               </div>
             </motion.article>
-          )) : (
+          )) : !hasProjectsToRender ? (
             <div className="panel" style={{ padding: 24, textAlign: 'center', color: 'var(--muted)' }}>
               No projects available right now.
             </div>
-          )}
+          ) : null}
         </motion.div>
 
         <div style={{ textAlign: 'center', marginTop: 28 }}>

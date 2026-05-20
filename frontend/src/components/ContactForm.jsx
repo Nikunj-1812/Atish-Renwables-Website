@@ -134,9 +134,8 @@ export default function ContactForm() {
             </motion.div>
 
             <div style={{ marginTop: 24 }}>
-              <Button href="https://wa.me/919876543210" variant="primary">
-                <MessageCircle size={16} />
-                Chat on WhatsApp
+              <Button href="https://wa.me/916359260330" variant="primary" className="btn-icon" aria-label="Chat on WhatsApp">
+                <MessageCircle size={18} />
               </Button>
             </div>
           </motion.aside>

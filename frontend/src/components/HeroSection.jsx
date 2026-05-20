@@ -1,24 +1,5 @@
-import { motion } from 'framer-motion';
 import { ArrowDownToLine, ArrowRight } from 'lucide-react';
 import Button from './Button';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 10 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
-};
 
 export default function HeroSection({
   eyebrow,
@@ -27,7 +8,7 @@ export default function HeroSection({
   image,
   actions = [],
   stats = [],
-  priority = true,
+  priority = false,
   isHomePage = false,
 }) {
   return (
@@ -41,32 +22,22 @@ export default function HeroSection({
           decoding="async"
           style={{ objectPosition: 'center' }}
         />
+        {/* overlay to mask brightness while image loads/fades - prevents light flash on navigation */}
+        <div className="hero__overlay" aria-hidden="true" />
       </div>
 
       <div className="container">
-        <motion.div
-          className="hero__content"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <motion.div className="hero__intro-copy" variants={staggerContainer}>
+        <div className="hero__content" role="region" aria-label="Hero content">
+          <div className="hero__intro-copy">
             {eyebrow ? (
-              <motion.span className="section-eyebrow" style={{ color: '#ffd768' }} variants={fadeUp}>
-                {eyebrow}
-              </motion.span>
+              <span className="section-eyebrow" style={{ color: '#ffd768' }}>{eyebrow}</span>
             ) : null}
-            <motion.h1 className="hero__headline" variants={fadeUp}>
-              {title}
-            </motion.h1>
+            <h1 className="hero__headline">{title}</h1>
 
-            <motion.p className="hero__copy" variants={fadeUp}>
-              {copy}
-            </motion.p>
+            <p className="hero__copy">{copy}</p>
 
             {actions.length > 0 ? (
-              <motion.div className="hero__actions" variants={fadeUp}>
+              <div className="hero__actions">
                 {actions.map((action) => (
                   <Button
                     key={action.label}
@@ -80,21 +51,21 @@ export default function HeroSection({
                     {action.icon === 'download' ? <ArrowDownToLine size={16} /> : null}
                   </Button>
                 ))}
-              </motion.div>
+              </div>
             ) : null}
-          </motion.div>
+          </div>
 
           {stats.length > 0 ? (
-            <motion.div className="hero__stats" variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }}>
+            <div className="hero__stats">
               {stats.map((stat) => (
-                <motion.div key={stat.label} className="hero-stat" variants={staggerItem}>
+                <div key={stat.label} className="hero-stat">
                   <strong>{stat.value}</strong>
                   <span>{stat.label}</span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
+            </div>
           ) : null}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

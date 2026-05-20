@@ -21,48 +21,151 @@
   --radius-pill: 999px;
 }
 
+/* Chatbot widget styles */
+.chatbot-root {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 140;
+  font-family: Inter, sans-serif;
+}
+
+.chatbot-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(15, 106, 115, 0.2);
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease;
+}
+
+.chatbot-button:hover { transform: translateY(-4px) scale(1.04); box-shadow: 0 26px 60px rgba(15,106,115,0.22); }
+
+
+.chatbot-window {
+  width: 340px; /* slightly reduced */
+  max-width: calc(100vw - 36px);
+  height: 460px; /* reduced height for compact layout */
+  background: #ffffff; /* plain white background requested */
+  border-radius: 12px;
+  border: 1px solid rgba(15,106,115,0.04);
+  box-shadow: 0 22px 48px rgba(2, 40, 45, 0.10);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+  transform: translateY(14px) scale(.97);
+  opacity: 0;
+}
+
+.chatbot-open .chatbot-window {
+  display: flex;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+
+
+.chatbot-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px; /* reduced padding for compact look */
+  border-bottom: 1px solid rgba(15,106,115,0.06);
+  position: relative; /* allow absolute-positioned close button */
+}
+
+/* avatar/logo removed per request */
+
+.chatbot-title { font-weight: 800; color: var(--primary-strong); font-size: 0.95rem; }
+.chatbot-sub { font-size: 0.75rem; color: var(--muted); }
+
+.chatbot-close { background: transparent; border: 0; color: var(--muted); padding: 6px; border-radius: 8px; cursor: pointer; position: absolute; right: 8px; top: 8px; }
+.chatbot-close:hover { background: rgba(15,106,115,0.03); transform: translateY(-2px); }
+
+/* Ensure close button doesn't overlap on small headers */
+@media (max-width: 420px) {
+  .chatbot-close { right: 6px; top: 6px; }
+}
+
+
+.chatbot-body { flex: 1; padding: 12px; overflow: auto; }
+.chatbot-messages { display: grid; gap: 10px; }
+.chatbot-msg { display: flex; align-items: flex-end; }
+.chatbot-msg.bot { justify-content: flex-start; }
+.chatbot-msg.user { justify-content: flex-end; }
+.chatbot-bubble {
+  max-width: 78%; padding: 8px 12px; border-radius: 12px; font-size: 0.94rem; line-height: 1.28; box-shadow: 0 6px 18px rgba(15,106,115,0.03);
+}
+.chatbot-msg.bot .chatbot-bubble { background: rgba(255,255,255,0.8); color: var(--text); border: 1px solid rgba(15,106,115,0.04); }
+.chatbot-msg.user .chatbot-bubble { background: linear-gradient(135deg,var(--primary),var(--primary-strong)); color: #fff; }
+.chatbot-bubble:hover { transform: translateY(-3px); transition: transform 180ms ease; }
+
+
+.chatbot-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid rgba(15,106,115,0.04); }
+.chatbot-input input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(15,106,115,0.06); background: rgba(255,255,255,0.96); }
+.chatbot-send { background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: #fff; border-radius: 8px; padding: 8px 12px; font-weight: 800; }
+
+.chatbot-footer { padding: 10px; border-top: 1px solid rgba(15,106,115,0.04); display: flex; justify-content: center; }
+.chatbot-whatsapp-icon { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 10px; background: linear-gradient(135deg, #25d366, #12b04a); box-shadow: 0 10px 30px rgba(37,211,102,0.16); }
+.chatbot-whatsapp-icon svg { display: block; }
+
+
+@media (max-width: 640px) {
+  .chatbot-window { width: calc(100vw - 28px); height: 60vh; right: 12px; bottom: 78px; border-radius: 12px; }
+  .chatbot-root { right: 12px; bottom: 12px; }
+  .chatbot-button { width: 64px; height: 64px; }
+  .chatbot-whatsapp-icon { width: 52px; height: 52px; border-radius: 12px; }
+}
+
+/* Icon-only button variant for site */
+.btn.btn-icon { width: 48px; height: 48px; padding: 0; display: inline-grid; place-items: center; border-radius: 12px; }
+.btn.btn-icon svg { display: block; }
+
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Prevent accidental horizontal overflow from components */
+html, body, .app-shell { max-width: 100%; overflow-x: hidden; }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(164, 239, 249, 0.28), transparent 38%),
-    radial-gradient(circle at top right, rgba(253, 188, 19, 0.12), transparent 36%),
-    linear-gradient(180deg, #f8fcfd 0%, var(--bg) 100%);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
+.stat-grid,
+.team-grid,
+.service-grid,
+.project-grid,
+.benefit-grid,
+.process-grid,
+.contact-grid {
   display: grid;
-  place-items: center;
-  background: linear-gradient(180deg, #fbfefe 0%, #f2f9fb 100%);
+  gap: 20px;
+  overflow: hidden;
 }
 
-.intro-overlay__logo {
-  width: min(280px, 62vw);
-  height: auto;
-  object-fit: contain;
-  display: block;
-  filter: none;
-  background: transparent;
-  box-shadow: none;
-  will-change: transform, opacity, filter;
-  transform: translateZ(0);
+.project-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
 }
+
+/* When there are just 1-2 items, center them nicely */
+.project-grid--center {
+  justify-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.project-card {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  align-items: start;
+}
+
 
 a {
   color: inherit;
@@ -351,12 +454,24 @@ main {
     gap: 10px;
   }
 
+  .brand__copy {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    min-width: 0;
+  }
+
   .brand__name {
     font-size: 0.95rem;
+    line-height: 1.05;
   }
 
   .brand__tagline {
     font-size: 0.62rem;
+    line-height: 1.05;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .section {
@@ -374,6 +489,129 @@ main {
   .section-heading {
     margin-bottom: 20px;
   }
+}
+
+/* ABOUT: hide images on small screens and keep text/layout tidy */
+@media (max-width: 640px) {
+  .about-section .about-media { display: none !important; }
+  .about-section .about-content { flex: 1 1 100%; width: 100%; }
+  .about-section .section-title { font-size: 1.2rem; }
+  .about-section .stack-item { padding: 8px 12px; }
+}
+
+/* PROJECTS: ensure mega/featured images are visible on small screens without cropping */
+@media (max-width: 640px) {
+  .featured-media img,
+  .project-card__media img,
+  .media-frame img {
+    object-fit: contain !important;
+    height: auto !important;
+    max-height: none;
+    width: 100%;
+  }
+
+  /* make project cards use natural flow and avoid overflow */
+  .project-card { border-radius: 12px; overflow: hidden; }
+  .project-grid { gap: 14px; }
+  .project-grid--center {
+    grid-template-columns: 1fr !important;
+    justify-items: stretch;
+  }
+
+  .featured-project-card .featured-media,
+  .featured-project-card .featured-media img,
+  .featured-project-card .featured-media .media-frame__img {
+    background: transparent;
+    max-height: none;
+    height: auto;
+  }
+
+  .featured-project-card .featured-media {
+    flex: 1 1 auto;
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    line-height: 0;
+    border-radius: 12px;
+  }
+
+  .featured-project-card .featured-split {
+    gap: 14px;
+  }
+
+  .featured-project-card .pill {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 820px) {
+  .featured-project-card .featured-split {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .featured-project-card .featured-media {
+    flex: 1 1 auto;
+    max-width: 100%;
+    max-height: none;
+    width: 100%;
+  }
+
+  .featured-project-card .featured-media img,
+  .featured-project-card .featured-media .media-frame__img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+
+  .featured-project-card .featured-project__content {
+    padding: 0;
+  }
+}
+
+/* NAVBAR: keep tagline on one line on small screens */
+@media (max-width: 480px) {
+  .brand__copy { flex-direction: row; align-items: center; gap: 8px; }
+  .brand__tagline { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.56rem; }
+}
+
+/* CALCULATOR: mobile layout fixes to prevent right-side clipping */
+@media (max-width: 640px) {
+  .form-grid--2 { grid-template-columns: 1fr !important; }
+  .calculator-card { max-width: 100%; padding: 12px; margin: 0 12px; }
+  .calculator-form { max-width: 100%; }
+  .calculator-results-grid { grid-template-columns: 1fr; }
+}
+
+/* Intro overlay (initial loading animation) styling */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(244,250,253,1), rgba(255,255,255,1));
+  z-index: 9999;
+}
+.intro-overlay__logo { width: 160px; height: auto; display: block; }
+
+/* ensure overlay prevents body scroll while visible */
+.intro-overlay ~ .app-main-wrapper { pointer-events: none; }
+
+/* Mobile-first navbar adjustments */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .navbar__actions { display: none; }
+  .brand__logo { width: 36px; height: 36px; }
+}
+
+@media (max-width: 480px) {
+  .brand__logo { width: 32px; height: 32px; }
+  .brand__name { font-size: 0.95rem; }
+  .navbar__inner { min-height: 56px; gap: 12px; }
 }
 
 .nav-links {
@@ -447,6 +685,14 @@ main {
 .mobile-panel {
   display: none;
   padding: 0 0 20px;
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: calc(100% + 8px);
+  background: rgba(255,255,255,0.98);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(2,40,45,0.06);
+  z-index: 70;
 }
 
 .mobile-panel.open {
@@ -465,6 +711,9 @@ main {
   overflow: hidden;
   padding: 56px 0 48px;
   min-height: 400px;
+  /* Ensure a stable background color while hero background image loads/animates
+     Prevents a flash of light/white when navigating between pages */
+  background-color: #071e1c;
 }
 
 .hero--home {
@@ -483,11 +732,14 @@ main {
   z-index: 0;
   opacity: 0;
   animation: fadeInImage 0.8s ease-out forwards;
+  /* Keep the same base tone as .hero to avoid background flash */
+  background-color: inherit;
 }
 
 @keyframes fadeInImage {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  /* Simple popup: start slightly zoomed-in and transparent, pop to natural scale and full opacity */
+  from { opacity: 0; transform: scale(1.04); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .hero__bg img {
@@ -495,6 +747,25 @@ main {
   height: 100%;
   object-fit: cover;
   object-position: right center;
+  /* make sure image transition is smooth and does not cause sudden brightness
+     change -- keep hardware accelerated opacity transition */
+  will-change: opacity, transform;
+}
+
+/* Overlay sits above the image and fades out quickly to avoid framebuffer/paint flashes
+   when navigating between pages. Keeps hero tone consistent while image decodes. */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* above image, below content */
+  background-color: rgba(7, 30, 28, 0.95);
+  pointer-events: none;
+  animation: overlayFade 220ms ease-out 40ms forwards;
+}
+
+@keyframes overlayFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 .hero__content {
@@ -504,6 +775,14 @@ main {
   gap: 16px;
   justify-items: start;
   max-width: 880px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: heroFadeUp 0.6s ease-out 0.12s forwards;
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Home-specific tighter layout and font scale */
@@ -907,6 +1186,8 @@ main {
   display: grid;
   gap: 20px;
   overflow: hidden;
+}
+
 .project-grid {
   display: grid;
   gap: 20px;
@@ -923,8 +1204,6 @@ main {
 .project-card {
   width: 100%;
   max-width: 100%;
-}
-
 }
 
 .stat-grid {
@@ -1002,8 +1281,12 @@ main {
 
   .service-card__media,
   .project-card__media {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
   }
+
+  /* Tighter card spacing on small screens */
+  .project-card__body { padding: 12px; }
+  .project-card__title { font-size: 1.02rem; }
 }
 
 .contact-grid {
@@ -1097,7 +1380,7 @@ main {
 .team-card__body,
 .process-card__body,
 .stat-card__body {
-  padding: 22px;
+  padding: 18px;
 }
 
 .team-card__body {
@@ -1868,7 +2151,7 @@ main {
     gap: 12px;
   }
 
-  .brand span {
+  .brand__name {
     font-size: 0.95rem;
   }
 

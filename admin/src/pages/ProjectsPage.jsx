@@ -30,11 +30,9 @@ export default function ProjectsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
 
-  const featuredProject = useMemo(() => projects.find((project) => project.isMegaProject), [projects]);
-  const regularProjects = useMemo(
-    () => projects.filter((project) => !project.isMegaProject),
-    [projects]
-  );
+  const featuredProjects = useMemo(() => projects.filter((project) => project.isMegaProject), [projects]);
+  const featuredProject = featuredProjects[0] || null;
+  const regularProjects = useMemo(() => projects.filter((project) => !project.isMegaProject), [projects]);
 
   const fetchProjects = async () => {
     setLoading(true);
@@ -168,54 +166,108 @@ export default function ProjectsPage() {
       {error ? <p className="mb-4 rounded-xl bg-rose-50 p-3 text-sm font-medium text-rose-700">{error}</p> : null}
       {loading ? <Loader label="Loading projects" /> : null}
 
-      {!loading && featuredProject ? (
-        <section className="mb-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+      {!loading && featuredProjects.length > 0 ? (
+        <section className="mb-5">
           <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-brand-700">
             <FolderKanban size={16} />
-            Featured Project
+            Featured Projects
           </div>
-          <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
-            <img
-              src={featuredProject.imageUrl}
-              alt={featuredProject.projectName}
-              className="h-56 w-full rounded-2xl object-cover"
-              loading="lazy"
-            />
-            <div className="grid content-center gap-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">Mega Project</span>
-                {featuredProject.isDefault && (
-                  <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Default</span>
-                )}
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">{featuredProject.category}</span>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">{featuredProject.systemSizeKw} kW</span>
+
+          {featuredProjects.length === 1 ? (
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+              <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
+                <img
+                  src={featuredProject.imageUrl}
+                  alt={featuredProject.projectName}
+                  className="h-56 w-full rounded-2xl object-cover"
+                  loading="lazy"
+                />
+                <div className="grid content-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">Mega Project</span>
+                    {featuredProject.isDefault && (
+                      <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">Default</span>
+                    )}
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">{featuredProject.category}</span>
+                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">{featuredProject.systemSizeKw} kW</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-slate-900">{featuredProject.projectName}</h2>
+                  <p className="text-sm text-slate-500">{featuredProject.location} · {featuredProject.city}, {featuredProject.district}</p>
+                  <p className="text-sm leading-6 text-slate-600">{featuredProject.description}</p>
+                  <div className="flex flex-wrap gap-2 text-sm text-slate-500">
+                    <span className="rounded-lg bg-slate-50 px-3 py-2">Case Study: {featuredProject.caseStudy || 'Not Available'}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(featuredProject)}
+                      className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      <Edit3 size={14} />
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(featuredProject)}
+                      className="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                    >
+                      <Trash2 size={14} />
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">{featuredProject.projectName}</h2>
-              <p className="text-sm text-slate-500">{featuredProject.location} · {featuredProject.city}, {featuredProject.district}</p>
-              <p className="text-sm leading-6 text-slate-600">{featuredProject.description}</p>
-              <div className="flex flex-wrap gap-2 text-sm text-slate-500">
-                <span className="rounded-lg bg-slate-50 px-3 py-2">Case Study: {featuredProject.caseStudy || 'Not Available'}</span>
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => openEditModal(featuredProject)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                >
-                  <Edit3 size={14} />
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(featuredProject)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
-                >
-                  <Trash2 size={14} />
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
+            </section>
+          ) : (
+            <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {featuredProjects.map((project) => (
+                <article key={project._id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+                  <div className="relative">
+                    <img src={project.imageUrl} alt={project.projectName} className="h-44 w-full object-cover" loading="lazy" />
+                    <span className="absolute left-3 top-3 rounded-full bg-yellow-50 px-3 py-1 text-xs font-semibold text-yellow-700">Mega Project</span>
+                  </div>
+                  <div className="grid gap-3 p-5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-lg font-semibold text-slate-900">{project.projectName}</h3>
+                        <p className="mt-1 text-sm text-slate-500">{project.location}</p>
+                      </div>
+                      {project.isDefault && (
+                        <span className="flex-shrink-0 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 whitespace-nowrap">Default</span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-slate-500">
+                      <span>{project.city}, {project.district}</span>
+                      <span className="font-semibold text-brand-700">{project.systemSizeKw} kW</span>
+                    </div>
+
+                    <p className="text-sm leading-6 text-slate-600">{project.description}</p>
+                    <p className="text-sm text-slate-500">Case Study: {project.caseStudy || 'Not Available'}</p>
+
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => openEditModal(project)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                      >
+                        <Edit3 size={14} />
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(project)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50"
+                      >
+                        <Trash2 size={14} />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </section>
+          )}
         </section>
       ) : null}
 

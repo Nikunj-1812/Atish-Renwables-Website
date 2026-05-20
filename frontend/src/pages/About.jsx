@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import HeroSection from '../components/HeroSection';
 import AboutSection from '../components/AboutSection';
 import TeamSection from '../components/TeamSection';
+import AboutImg from '../assets/About.png';
 import Loader from '../components/Loader';
 import { getTeam } from '../utils/api';
 
@@ -57,7 +58,7 @@ export default function About() {
         eyebrow="About"
         title="About Atish Renewables"
         copy="A modern EPC team focused on sustainable solar delivery, long-term reliability, and practical engineering discipline."
-        image="/about.webp"
+        image={AboutImg}
         isHomePage={false}
       />
       <AboutSection />

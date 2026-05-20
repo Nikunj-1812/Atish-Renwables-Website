@@ -14,7 +14,7 @@ export const socialLinks = [
   { label: 'Facebook', href: 'https://facebook.com/', icon: Facebook },
   { label: 'LinkedIn', href: 'https://linkedin.com/', icon: Linkedin },
   { label: 'Email', href: 'mailto:hello@atishrenewable.com', icon: Mail },
-  { label: 'WhatsApp', href: 'https://wa.me/919876543210', icon: MessageCircle },
+  { label: 'WhatsApp', href: 'https://wa.me/916359260330?text=Hi%20Atish%20Renewables%20%F0%9F%8C%9E%2C%20I%27m%20%5BName%5D%20from%20%5BCity%5D.%20My%20monthly%20bill%20is%20%E2%82%B9%5Bamount%5D.%20I%27d%20like%20a%20free%20consultation', icon: MessageCircle },
 ];
 
 export const heroStats = [
@@ -104,7 +104,7 @@ export const services = [
   },
 ];
 
-export const projectFilters = ['All', 'Industrial', 'Commercial', 'Residential'];
+export const projectFilters = ['All', 'Mega', 'Industrial', 'Commercial', 'Residential'];
 
 export const featuredProject = {
   title: 'Mega Solar Park X',
@@ -192,8 +192,8 @@ export const contactMethods = [
   {
     icon: Phone,
     title: 'Call Us',
-    value: '+91 98765 43210',
-    link: 'tel:+919876543210',
+    value: '+91 63592 60330',
+    link: 'tel:+916359260330',
   },
   {
     icon: Mail,

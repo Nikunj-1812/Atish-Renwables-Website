@@ -6,6 +6,7 @@ import ServicesSection from '../components/ServicesSection';
 import Loader from '../components/Loader';
 import { getServices } from '../utils/api';
 import { services as fallbackServices } from '../data/siteData';
+import ServiceImg from '../assets/Service.png';
 
 export default function Services() {
   const [servicesData, setServicesData] = useState(null);
@@ -51,7 +52,7 @@ export default function Services() {
         eyebrow="Services"
         title="Our solar services"
         copy="Industrial EPC, commercial rooftops, and residential solutions designed for efficiency, reliability, and long-term savings."
-        image="/service.webp"
+        image={ServiceImg}
         isHomePage={false}
       />
       <div className="content-area-wrapper" style={{ minHeight: '60vh' }}>

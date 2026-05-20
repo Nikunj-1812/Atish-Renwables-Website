@@ -5,6 +5,7 @@ import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
+import Chatbot from './components/Chatbot';
 import ScrollToTop from './components/ScrollToTop';
 import Loader from './components/Loader';
 import React, { Suspense, lazy } from 'react';
@@ -41,6 +42,16 @@ function Layout() {
     const timer = window.setTimeout(() => setShowIntro(false), 5200);
     return () => window.clearTimeout(timer);
   }, []);
+
+  // Prevent background scroll/interactions while intro overlay is active
+  useEffect(() => {
+    if (showIntro) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = prev; };
+    }
+    return undefined;
+  }, [showIntro]);
 
   // Disable browser scroll restoration for manual control
   useEffect(() => {
@@ -99,6 +110,7 @@ function Layout() {
         </AnimatePresence>
         <CTA />
         <Footer />
+        <Chatbot />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import HeroSection from '../components/HeroSection';
+import HomeImg from '../assets/Home.png';
 import AboutSection from '../components/AboutSection';
 import WhyChooseSection from '../components/WhyChooseSection';
 import ProcessSection from '../components/ProcessSection';
@@ -9,11 +10,12 @@ export default function Home() {
   return (
     <>
       <HeroSection
-        eyebrow="Solar EPC solutions"
+        eyebrow="Portfolio"
         title={<>Switch to <span>Solar</span> &amp; save on electricity bills</>}
         copy="Empowering homes, businesses, and industrial facilities with high-performance solar engineering, transparent delivery, and measurable returns."
-        image="/home.webp"
+        image={HomeImg}
         isHomePage={true}
+        priority={true}
         actions={[
           { label: 'Get Free Quote', to: '/contact', variant: 'primary', icon: 'arrow' },
           { label: 'Calculate Savings', to: '/calculator', variant: 'secondary' },

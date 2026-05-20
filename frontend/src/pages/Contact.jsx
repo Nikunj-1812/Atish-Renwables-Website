@@ -10,7 +10,6 @@ export default function Contact() {
         copy="Tell us your solar requirement and the team will respond with the right next step, whether it is a residential rooftop or a large EPC project."
         image="/contact.webp"
         isHomePage={false}
-        priority
       />
       <ContactForm />
     </>

@@ -69,25 +69,49 @@ function Layout() {
             className="intro-overlay"
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{ opacity: 0, transition: { duration: 0.5, ease: 'easeInOut' } }}
           >
+            {/* Subtle background pulse ring */}
+            <motion.div
+              className="intro-overlay__ring"
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: [0.6, 1.4], opacity: [0.18, 0] }}
+              transition={{ duration: 2.8, delay: 0.6, ease: 'easeOut', repeat: 1, repeatDelay: 0.4 }}
+            />
+
+            {/* Logo — fade in, hold, gentle scale, fade out */}
             <motion.img
               src={introLogo}
-              alt="ATISH RENEWABLES"
+              alt="Atish Renewables"
               className="intro-overlay__logo"
-              initial={{ scale: 0.9, opacity: 0, filter: 'blur(0px) brightness(1)' }}
+              initial={{ opacity: 0, scale: 0.92, y: 8 }}
               animate={{
-                scale: [0.9, 1, 1, 1.7],
                 opacity: [0, 1, 1, 0],
-                filter: [
-                  'blur(0px) brightness(1)',
-                  'blur(0px) brightness(1)',
-                  'blur(0px) brightness(1)',
-                  'blur(16px) brightness(1)',
-                ],
+                scale: [0.92, 1, 1, 1.06],
+                y: [8, 0, 0, -4],
               }}
-              transition={{ duration: 4.5, delay: 0.25, ease: [0.4, 0, 0.2, 1], times: [0, 0.18, 0.52, 1] }}
+              transition={{
+                duration: 4.2,
+                delay: 0.2,
+                ease: [0.4, 0, 0.2, 1],
+                times: [0, 0.2, 0.72, 1],
+              }}
             />
+
+            {/* Tagline — fades in after logo */}
+            <motion.p
+              className="intro-overlay__tagline"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: [0, 1, 1, 0], y: [6, 0, 0, -2] }}
+              transition={{
+                duration: 3.6,
+                delay: 0.7,
+                ease: [0.4, 0, 0.2, 1],
+                times: [0, 0.22, 0.72, 1],
+              }}
+            >
+              Raise Your Green Energy
+            </motion.p>
           </motion.div>
         ) : null}
       </AnimatePresence>

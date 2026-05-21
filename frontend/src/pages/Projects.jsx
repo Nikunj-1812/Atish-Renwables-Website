@@ -16,9 +16,9 @@ export default function Projects() {
       try {
         const response = await getProjects();
         const projectsData = response?.data?.projects || response?.projects || [];
-        console.log('Projects:', projectsData);
         if (mounted) {
-          setProjects(projectsData);
+          // Spread into a new array so React.memo always detects the change
+          setProjects([...projectsData]);
         }
       } catch (error) {
         console.error('Projects fetch error:', error);
@@ -38,8 +38,8 @@ export default function Projects() {
       loadProjects();
     };
 
-    // Auto-refresh frequently so CRM changes show up quickly.
-    const interval = setInterval(loadProjects, 5000);
+    // Auto-refresh every 3s so CRM changes show up quickly.
+    const interval = setInterval(loadProjects, 3000);
     window.addEventListener('focus', refreshOnFocus);
 
     return () => {

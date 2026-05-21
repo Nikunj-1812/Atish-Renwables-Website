@@ -1,0 +1,10 @@
+{
+  "name": "atish-renewables-monorepo",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
+  "scripts": {
+    "start": "yarn workspace atish-website start"
+  }
+}

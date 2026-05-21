@@ -14,11 +14,11 @@ const leadSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
       lowercase: true,
       validate: {
-        validator: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+        validator: (value) => !value || value === 'calculator' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
         message: 'Please provide a valid email address.',
       },
     },

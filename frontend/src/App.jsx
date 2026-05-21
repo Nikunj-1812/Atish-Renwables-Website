@@ -39,7 +39,7 @@ function Layout() {
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setShowIntro(false), 5200);
+    const timer = window.setTimeout(() => setShowIntro(false), 4600);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -97,21 +97,6 @@ function Layout() {
                 times: [0, 0.2, 0.72, 1],
               }}
             />
-
-            {/* Tagline — fades in after logo */}
-            <motion.p
-              className="intro-overlay__tagline"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: [0, 1, 1, 0], y: [6, 0, 0, -2] }}
-              transition={{
-                duration: 3.6,
-                delay: 0.7,
-                ease: [0.4, 0, 0.2, 1],
-                times: [0, 0.22, 0.72, 1],
-              }}
-            >
-              Raise Your Green Energy
-            </motion.p>
           </motion.div>
         ) : null}
       </AnimatePresence>

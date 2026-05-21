@@ -1,6 +1,7 @@
 import { BarChart3, FolderKanban, Settings, Users } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { prefetchAdminRoute } from '../App';
+import logoImg from '../assets/logo.png';
 
 const links = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: BarChart3 },
@@ -14,7 +15,7 @@ export default function Sidebar() {
   return (
     <aside className="w-full border-b border-slate-200 bg-white/95 p-4 lg:h-screen lg:w-72 lg:border-b-0 lg:border-r lg:p-6">
       <div className="mb-6 flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-sm font-bold text-white">AR</div>
+        <img src={logoImg} alt="Atish Renewables" className="h-10 w-10 object-contain rounded-xl" />
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">CRM Panel</p>
           <h1 className="text-base font-semibold text-slate-900">Atish Admin</h1>

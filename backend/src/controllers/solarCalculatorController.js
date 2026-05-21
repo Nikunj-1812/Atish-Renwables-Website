@@ -1,8 +1,9 @@
+const { Lead } = require('../models');
 const { validateSolarPayload } = require('../utils/requestValidators');
 const { calculateSolarEstimateData } = require('../services/solarService');
 const { sendError, sendSuccess } = require('../utils/apiResponse');
 
-const calculateSolarEstimate = (req, res) => {
+const calculateSolarEstimate = async (req, res) => {
   try {
     const invalidFields = validateSolarPayload(req.body);
 
@@ -15,6 +16,30 @@ const calculateSolarEstimate = (req, res) => {
     }
 
     const estimate = calculateSolarEstimateData(req.body);
+
+    // Save as CRM Lead if name and phone are provided
+    if (req.body.name && req.body.phone) {
+      const isNumericPincode = /^\d+$/.test(req.body.pincode.trim());
+      const isDefaultLoc = !estimate.location || estimate.location === 'default';
+      
+      let cityValue = '';
+      if (!isDefaultLoc) {
+        cityValue = `${estimate.location} (${req.body.pincode.trim()})`;
+      } else {
+        cityValue = isNumericPincode ? `Pincode: ${req.body.pincode.trim()}` : req.body.pincode.trim();
+      }
+
+      await Lead.create({
+        name: req.body.name.trim(),
+        phone: req.body.phone.trim(),
+        email: 'calculator',
+        city: cityValue,
+        requirement: 'residential',
+        monthlyBill: Number(req.body.monthlyElectricityBill),
+        message: `Solar Calculator Estimate Submission. Input: ${req.body.pincode.trim()}.${!isDefaultLoc ? ` Matched Location: ${estimate.location}.` : ''}`,
+        notes: `Estimate Details:\n- System Size: ${estimate.systemSizeKw} kW\n- Estimated Cost: ₹${estimate.totalCost}\n- Payback Period: ${estimate.paybackPeriodYears} years\n- Monthly Savings: ₹${estimate.monthlySavings}\n- Yearly Savings: ₹${estimate.yearlySavings}`,
+      });
+    }
 
     return sendSuccess(res, {
       statusCode: 200,

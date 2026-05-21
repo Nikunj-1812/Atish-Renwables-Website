@@ -116,15 +116,23 @@ const validateTeamPayload = (body = {}, { requireImageUrl = false } = {}) => {
 
 const validateSolarPayload = (body = {}) => {
   const errors = [];
-  const { pincode, monthlyElectricityBill } = body;
+  const { pincode, monthlyElectricityBill, name, phone } = body;
 
-  if (!/^\d{6}$/.test(String(pincode || '').trim())) {
+  if (!isNonEmptyString(pincode)) {
     errors.push('pincode');
   }
 
   const parsedBill = Number(monthlyElectricityBill);
   if (!Number.isFinite(parsedBill) || parsedBill <= 0) {
     errors.push('monthlyElectricityBill');
+  }
+
+  if (name !== undefined && !isNonEmptyString(name)) {
+    errors.push('name');
+  }
+
+  if (phone !== undefined && !isNonEmptyString(phone)) {
+    errors.push('phone');
   }
 
   return errors;

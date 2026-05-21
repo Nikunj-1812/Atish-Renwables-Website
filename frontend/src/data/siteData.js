@@ -10,11 +10,11 @@ export const navLinks = [
 ];
 
 export const socialLinks = [
-  { label: 'Instagram', href: 'https://instagram.com/', icon: Instagram },
-  { label: 'Facebook', href: 'https://facebook.com/', icon: Facebook },
-  { label: 'LinkedIn', href: 'https://linkedin.com/', icon: Linkedin },
-  { label: 'Email', href: 'mailto:hello@atishrenewable.com', icon: Mail },
-  { label: 'WhatsApp', href: 'https://wa.me/916359260330?text=Hi%20Atish%20Renewables%20%F0%9F%8C%9E%2C%20I%27m%20%5BName%5D%20from%20%5BCity%5D.%20My%20monthly%20bill%20is%20%E2%82%B9%5Bamount%5D.%20I%27d%20like%20a%20free%20consultation', icon: MessageCircle },
+  { label: 'Instagram', href: 'https://www.instagram.com/atishrenewablesin/?utm_source=chatgpt.com', icon: Instagram },
+  { label: 'Facebook', href: 'https://www.facebook.com/AtishRenewablesIn/?utm_source=chatgpt.com', icon: Facebook },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/atish-renewables-in/?utm_source=chatgpt.com', icon: Linkedin },
+  { label: 'Email', href: 'mailto:atishrenewables@gmail.com', icon: Mail },
+  { label: 'WhatsApp', href: 'https://wa.me/916359260330?text=Hi%20Atish%20Renewables%20%F0%9F%8C%9E%2C%20I%27m%20interested%20in%20your%20solar%20solutions.', icon: MessageCircle },
 ];
 
 export const heroStats = [
@@ -198,13 +198,19 @@ export const contactMethods = [
   {
     icon: Mail,
     title: 'Email Us',
-    value: 'hello@atishrenewable.com',
-    link: 'mailto:hello@atishrenewable.com',
+    value: 'atishrenewables@gmail.com',
+    link: 'mailto:atishrenewables@gmail.com',
   },
   {
     icon: MapPin,
     title: 'Office Location',
-    value: 'Renewable Tower, Bengaluru',
+    value: 'Atish Renewables, Raama Esquire, SF-14, Laxmipura, Gotri, Vadodara, Gujarat 390020',
+    link: 'https://maps.google.com/?q=Atish+Renewables,+Raama+Esquire,+SF-14,+Laxmipura,+Gotri,+Vadodara,+Gujarat+390020',
+  },
+  {
+    icon: Clock3,
+    title: 'Business Hours',
+    value: 'Morning 9:00 AM to Evening 6:00 PM',
     link: '#',
   },
 ];

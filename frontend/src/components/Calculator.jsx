@@ -87,6 +87,8 @@ export default function Calculator() {
     setResults(null);
 
     const payload = {
+      name: formData.name,
+      phone: formData.phone,
       pincode: formData.cityPincode,
       monthlyElectricityBill: parseFloat(formData.monthlyBill),
     };

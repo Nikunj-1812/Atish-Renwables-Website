@@ -129,7 +129,7 @@ function ProjectsSection({ projectData }) {
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 16, borderTop: '1px solid rgba(15,106,115,0.12)' }}>
                     <div>
-                      <div style={{ fontSize: '.78rem', textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--muted)', fontWeight: 800 }}>
+                      <div style={{ fontSize: '.78rem', textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--muted)', fontWeight: 800, whiteSpace: 'nowrap' }}>
                         System Size
                       </div>
                       <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.1rem', color: 'var(--primary-strong)', fontWeight: 800 }}>
@@ -174,7 +174,7 @@ function ProjectsSection({ projectData }) {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 16, borderTop: '1px solid rgba(15,106,115,0.12)' }}>
                   <div>
-                    <div style={{ fontSize: '.78rem', textTransform: 'uppercase', letterSpacing: '.12em', color: 'var(--muted)', fontWeight: 800 }}>
+                    <div style={{ fontSize: '.78rem', textTransform: 'uppercase', letterSpacing: '.06em', color: 'var(--muted)', fontWeight: 800, whiteSpace: 'nowrap' }}>
                       System Size
                     </div>
                     <div style={{ fontFamily: 'Manrope, sans-serif', fontSize: '1.1rem', color: 'var(--primary-strong)', fontWeight: 800 }}>

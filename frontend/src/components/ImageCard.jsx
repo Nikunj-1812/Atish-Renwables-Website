@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 
 function ImageCard({ src, alt, className = '', height = 'h-56' }) {
   return (
-    <div className={`image-card ${height} overflow-hidden relative ${className}`}>
+    <div className={`image-card ${height} overflow-hidden relative ${className}`} style={{ width: '100%', height: '100%' }}>
       <img
         src={src}
         alt={alt}

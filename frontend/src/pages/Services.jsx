@@ -9,8 +9,15 @@ import { services as fallbackServices } from '../data/siteData';
 import ServiceImg from '../assets/Service.png';
 
 export default function Services() {
-  const [servicesData, setServicesData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [servicesData, setServicesData] = useState(() => {
+    try {
+      const cached = localStorage.getItem('atish_services');
+      return cached ? JSON.parse(cached) : fallbackServices;
+    } catch {
+      return fallbackServices;
+    }
+  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -20,18 +27,14 @@ export default function Services() {
         const response = await getServices();
         const nextServices = response?.data?.services || response?.services || [];
         console.log('Services:', nextServices);
-        if (mounted) {
-          setServicesData(nextServices.length > 0 ? nextServices : fallbackServices);
+        if (mounted && nextServices.length > 0) {
+          setServicesData(nextServices);
+          try {
+            localStorage.setItem('atish_services', JSON.stringify(nextServices));
+          } catch (e) {}
         }
       } catch (error) {
         console.error('Services fetch error:', error);
-        if (mounted) {
-          setServicesData(fallbackServices);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
       }
     };
 

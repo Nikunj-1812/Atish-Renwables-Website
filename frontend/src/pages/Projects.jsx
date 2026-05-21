@@ -4,10 +4,18 @@ import HeroSection from '../components/HeroSection';
 import ProjectsSection from '../components/ProjectsSection';
 import Loader from '../components/Loader';
 import { getProjects } from '../utils/api';
+import { projects as fallbackProjects } from '../data/siteData';
 
 export default function Projects() {
-  const [projects, setProjects] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState(() => {
+    try {
+      const cached = localStorage.getItem('atish_projects');
+      return cached ? JSON.parse(cached) : fallbackProjects;
+    } catch {
+      return fallbackProjects;
+    }
+  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -16,19 +24,14 @@ export default function Projects() {
       try {
         const response = await getProjects();
         const projectsData = response?.data?.projects || response?.projects || [];
-        if (mounted) {
-          // Spread into a new array so React.memo always detects the change
+        if (mounted && projectsData.length > 0) {
           setProjects([...projectsData]);
+          try {
+            localStorage.setItem('atish_projects', JSON.stringify(projectsData));
+          } catch (e) {}
         }
       } catch (error) {
         console.error('Projects fetch error:', error);
-        if (mounted) {
-          setProjects([]);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
       }
     };
 
@@ -38,8 +41,8 @@ export default function Projects() {
       loadProjects();
     };
 
-    // Auto-refresh every 3s so CRM changes show up quickly.
-    const interval = setInterval(loadProjects, 3000);
+    // Auto-refresh throttled to 15s to prevent high CPU / server load.
+    const interval = setInterval(loadProjects, 15000);
     window.addEventListener('focus', refreshOnFocus);
 
     return () => {

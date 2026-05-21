@@ -14,7 +14,7 @@ const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
 
 const corsOptions = {
 	origin: (origin, callback) => {
-		if (!origin || allowedOrigins.includes(origin)) {
+		if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
 			return callback(null, true);
 		}
 

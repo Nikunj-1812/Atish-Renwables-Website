@@ -24,8 +24,8 @@
 /* Chatbot widget styles */
 .chatbot-root {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: 28px;
+  bottom: 28px;
   z-index: 140;
   font-family: Inter, sans-serif;
 }
@@ -117,7 +117,7 @@
 
 @media (max-width: 640px) {
   .chatbot-window { width: calc(100vw - 28px); height: 60vh; right: 12px; bottom: 78px; border-radius: 12px; }
-  .chatbot-root { right: 12px; bottom: 12px; }
+  .chatbot-root { right: 20px; bottom: 20px; }
   .chatbot-button { width: 64px; height: 64px; }
   .chatbot-whatsapp-icon { width: 52px; height: 52px; border-radius: 12px; }
 }
@@ -737,8 +737,8 @@ main {
 /* Subtle animated ring behind the logo */
 .intro-overlay__ring {
   position: absolute;
-  width: clamp(180px, 40vw, 320px);
-  height: clamp(180px, 40vw, 320px);
+  width: clamp(280px, 45vw, 440px);
+  height: clamp(280px, 45vw, 440px);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(15,106,115,0.12) 0%, transparent 70%);
   pointer-events: none;
@@ -746,7 +746,7 @@ main {
 
 /* Logo — proper size, never distorted */
 .intro-overlay__logo {
-  width: clamp(120px, 22vw, 200px);
+  width: clamp(200px, 35vw, 320px);
   height: auto;
   display: block;
   object-fit: contain;
@@ -1712,7 +1712,7 @@ main {
 .footer__inner {
   position: relative;
   z-index: 1;
-  padding: 72px 0 24px;
+  padding: 44px 0 24px;
 }
 
 .footer__top {
@@ -2189,10 +2189,27 @@ main {
   }
 
   .hero__actions,
-  .chip-group,
-  .requirement-options {
+  .chip-group {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .requirement-options {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+
+  .requirement-options::-webkit-scrollbar {
+    display: none;
+  }
+
+  .requirement-option {
+    flex: 0 0 auto;
   }
 
   .team-grid {

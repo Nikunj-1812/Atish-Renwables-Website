@@ -84,7 +84,7 @@ export const api = {
   updateLead: (id, payload) =>
     request(`/leads/${id}`, {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      data: payload,
     }),
 
   deleteLead: (id) =>

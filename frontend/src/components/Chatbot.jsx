@@ -34,6 +34,26 @@ export default function Chatbot() {
   const handleSend = () => {
     const trimmed = input.trim();
     if (!trimmed) return;
+
+    // Direct WhatsApp/Call command triggers
+    if (/\bwhatsapp\b/i.test(trimmed)) {
+      setMessages((m) => [...m, { from: 'user', text: trimmed }]);
+      pushBot('Opening WhatsApp chat for you...');
+      const msg = `Hi Atish Renewables 🌞, I'm interested in your solar solutions.`;
+      const url = 'https://wa.me/916359260330?text=' + encodeURIComponent(msg);
+      setTimeout(() => window.open(url, '_blank'), 600);
+      setInput('');
+      return;
+    }
+
+    if (/\bcall\b/i.test(trimmed)) {
+      setMessages((m) => [...m, { from: 'user', text: trimmed }]);
+      pushBot('Opening phone dialer with +91 63592 60330...');
+      setTimeout(() => window.open('tel:+916359260330', '_self'), 600);
+      setInput('');
+      return;
+    }
+
     setMessages((m) => [...m, { from: 'user', text: trimmed }]);
 
     if (step === 'askName') {

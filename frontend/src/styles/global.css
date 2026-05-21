@@ -2082,7 +2082,7 @@ main {
   }
 
   .footer__inner {
-    padding: 64px 0 22px;
+    padding: 40px 0 22px;
   }
 
   .section-heading {
@@ -2262,6 +2262,10 @@ main {
   .cta {
     padding-top: 40px;
     padding-bottom: 40px;
+  }
+
+  .footer__inner {
+    padding-top: 28px;
   }
 
   .section-heading {

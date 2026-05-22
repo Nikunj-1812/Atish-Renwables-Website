@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { clearSession, getToken } from '../auth/authStore';
 
-const API_BASE_URL = import.meta.env.VITE_ADMIN_API_URL || 'https://atish-renwables-website.onrender.com/api';
+const API_BASE_URL =
+  import.meta.env.VITE_ADMIN_API_URL ||
+  import.meta.env.VITE_API_URL ||
+  'https://atish-renwables-website.onrender.com/api';
 
 const httpClient = axios.create({
   baseURL: API_BASE_URL,

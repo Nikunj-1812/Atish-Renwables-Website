@@ -3,7 +3,10 @@
  * Centralizes all API calls with error handling and loading states
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://atish-renwables-website.onrender.com/api';
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_ADMIN_API_URL ||
+  'https://atish-renwables-website.onrender.com/api';
 
 /**
  * Generic API call handler with error management

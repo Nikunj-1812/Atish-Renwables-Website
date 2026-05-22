@@ -12,9 +12,25 @@ const { sendSuccess } = require('./utils/apiResponse');
 const app = express();
 const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
 
+const isAllowedOrigin = (origin) => {
+	if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+		return true;
+	}
+
+	if (origin.endsWith('.vercel.app')) {
+		return true;
+	}
+
+	if (origin.endsWith('.onrender.com')) {
+		return true;
+	}
+
+	return false;
+};
+
 const corsOptions = {
 	origin: (origin, callback) => {
-		if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+		if (isAllowedOrigin(origin)) {
 			return callback(null, true);
 		}
 

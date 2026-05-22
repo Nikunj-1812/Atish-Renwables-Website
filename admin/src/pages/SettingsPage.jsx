@@ -1,7 +1,10 @@
 import AdminLayout from '../layout/AdminLayout';
 
 export default function SettingsPage() {
-  const apiBaseUrl = import.meta.env.VITE_ADMIN_API_URL || 'https://atish-renwables-website.onrender.com/api';
+  const apiBaseUrl =
+    import.meta.env.VITE_ADMIN_API_URL ||
+    import.meta.env.VITE_API_URL ||
+    'https://atish-renwables-website.onrender.com/api';
 
   return (
     <AdminLayout title="Settings" subtitle="Environment and panel configuration">

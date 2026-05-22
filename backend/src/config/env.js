@@ -1,12 +1,25 @@
 const parseAllowedOrigins = (value) => {
+	const defaultOrigins = [
+		'http://localhost:5173',
+		'http://localhost:5174',
+		'http://localhost:5000',
+		'https://atish-renwables-admin.vercel.app',
+		'https://atish-renwables-website.vercel.app',
+		'https://atish-renewables-admin.vercel.app',
+		'https://atish-renewables-website.vercel.app',
+	];
+
 	if (!value) {
-		return ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5000'];
+		return defaultOrigins;
 	}
 
-	return value
-		.split(',')
-		.map((origin) => origin.trim())
-		.filter(Boolean);
+	return Array.from(new Set([
+		...defaultOrigins,
+		...value
+			.split(',')
+			.map((origin) => origin.trim())
+			.filter(Boolean),
+	]));
 };
 
 const validateRequiredEnv = () => {

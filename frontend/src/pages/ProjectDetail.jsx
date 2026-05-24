@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2, MapPin, PanelTop, Share2, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, CheckCircle2, Copy, MapPin, PanelTop, Share2, Sparkles } from 'lucide-react';
 import Loader from '../components/Loader';
 import Button from '../components/Button';
 import { getProjectById } from '../utils/api';
@@ -16,6 +16,7 @@ export default function ProjectDetail() {
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [copyToast, setCopyToast] = useState(false); // "Link copied" feedback
 
   useEffect(() => {
     let mounted = true;
@@ -23,24 +24,46 @@ export default function ProjectDetail() {
     const loadProject = async () => {
       setLoading(true);
       const response = await getProjectById(projectId);
-
       if (!mounted) return;
-
       if (response.success) {
         setProject(response.data);
       } else {
         setProject(null);
       }
-
       setLoading(false);
     };
 
     loadProject();
-
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, [projectId]);
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = project?.projectName || 'Atish Renewables — Solar Project';
+    const text = project?.description
+      ? `${project.description} — View the full case study:`
+      : 'Check out this solar project by Atish Renewables:';
+
+    // Use native Web Share API if available (mobile browsers, modern desktop)
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+        return;
+      } catch {
+        // User cancelled or share failed — fall through to clipboard
+      }
+    }
+
+    // Fallback: copy link to clipboard
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopyToast(true);
+      setTimeout(() => setCopyToast(false), 2500);
+    } catch {
+      // Last resort: prompt with the URL
+      window.prompt('Copy this link to share:', url);
+    }
+  };
 
   const caseStudy = project?.caseStudy?.trim() || fallbackCaseStudy;
 
@@ -78,14 +101,35 @@ export default function ProjectDetail() {
           <Button to="/projects" variant="secondary" className="btn-icon project-detail-nav__btn" aria-label="Back to Projects">
             <ArrowLeft size={20} />
           </Button>
-          <button
-            type="button"
-            className="btn btn-secondary btn-icon project-detail-nav__btn"
-            aria-label="Share Project"
-            onClick={() => navigator?.share ? navigator.share({ title: project.projectName, text: project.description }) : null}
-          >
-            <Share2 size={20} />
-          </button>
+
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="btn btn-secondary btn-icon project-detail-nav__btn"
+              aria-label="Share Project"
+              onClick={handleShare}
+            >
+              <Share2 size={20} />
+            </button>
+
+            {/* "Link copied" toast */}
+            <AnimatePresence>
+              {copyToast && (
+                <motion.div
+                  className="share-toast"
+                  initial={{ opacity: 0, y: 6, scale: 0.94 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 4, scale: 0.96 }}
+                  transition={{ duration: 0.2 }}
+                  role="status"
+                  aria-live="polite"
+                >
+                  <Copy size={13} />
+                  Link copied!
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <article className="panel project-detail-hero" style={{ overflow: 'hidden' }}>

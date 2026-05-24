@@ -3251,3 +3251,23 @@ main {
     font-size: 0.92rem;
   }
 }
+
+/* ── Share toast (project detail) ──────────────────────────────────────── */
+.share-toast {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: var(--r-md);
+  background: var(--text);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  pointer-events: none;
+  z-index: 10;
+}

@@ -1,7 +1,6 @@
 import { ArrowRight, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from './Button';
-import { hoverLift } from '../utils/motion';
 
 const PHONE_NUMBER = 'tel:+916359260330';
 const PHONE_DISPLAY = '+91 63592 60330';
@@ -37,7 +36,12 @@ export default function CTA() {
   return (
     <section className="cta">
       <div className="container">
-        <motion.div className="cta__card" style={cardStyle} {...hoverLift}>
+        <motion.div
+          className="cta__card"
+          style={cardStyle}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
           {/* Decorative background waves */}
           <div className="cta__bg" aria-hidden="true">
             <svg className="cta__bg-wave cta__bg-wave--left" viewBox="0 0 520 300" fill="none">
@@ -100,25 +104,13 @@ export default function CTA() {
             {/* CTA buttons */}
             <motion.div className="cta__actions" variants={itemVariants}>
               {/* Get Free Quote */}
-              <motion.div
-                whileHover={{ scale: 1.045, y: -3 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 340, damping: 22 }}
-              >
-                <Button to="/contact" variant="accent" className="cta__btn-quote">
-                  Get Free Quote
-                  <ArrowRight size={16} />
-                </Button>
-              </motion.div>
+              <Button to="/contact" variant="accent" className="cta__btn-quote">
+                Get Free Quote
+                <ArrowRight size={16} />
+              </Button>
 
               {/* Call Now */}
-              <motion.div
-                className="cta__call-wrap"
-                whileHover={{ scale: 1.045, y: -3 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: 'spring', stiffness: 340, damping: 22 }}
-              >
-                {/* Pulse ring */}
+              <div className="cta__call-wrap">
                 <motion.span
                   className="cta__call-pulse"
                   variants={pulseVariants}
@@ -133,7 +125,7 @@ export default function CTA() {
                   <Phone size={17} />
                   Call Now
                 </a>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </motion.div>

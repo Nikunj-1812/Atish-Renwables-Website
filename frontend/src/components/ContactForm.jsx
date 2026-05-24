@@ -4,7 +4,7 @@ import { Factory, BriefcaseBusiness, Home, Mail, MessageCircle } from 'lucide-re
 import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { contactMethods } from '../data/siteData';
-import { hoverLift, mediaHover, sectionMotion, staggerContainer, staggerItem } from '../utils/motion';
+import { hoverLift, sectionMotion, staggerContainer, staggerItem } from '../utils/motion';
 import { submitContactForm } from '../utils/api';
 
 export default function ContactForm() {
@@ -159,6 +159,8 @@ export default function ContactForm() {
                   fontWeight: 700,
                   boxShadow: '0 4px 14px rgba(37, 211, 102, 0.25)',
                   border: 'none',
+                  width: '100%',
+                  justifyContent: 'center',
                 }}
               >
                 <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor">
@@ -169,7 +171,7 @@ export default function ContactForm() {
             </div>
           </motion.aside>
 
-          <motion.div className="form-card" {...hoverLift} {...mediaHover}>
+          <motion.div className="form-card" {...hoverLift}>
             <form className="form-grid" onSubmit={handleSubmit}>
               <div className="field">
                 <label>Requirement *</label>

@@ -135,42 +135,36 @@ export default function Calculator() {
         {
           label: 'System Size',
           value: `${formatNum(results.systemSize)} kW`,
-          sub: 'Recommended capacity',
           icon: PanelTop,
           accent: 'primary',
         },
         {
           label: 'Estimated Cost',
           value: formatINR(results.estimatedCost),
-          sub: `@ ₹${(COST_PER_KW[type] / 1000).toFixed(0)}k per kW`,
           icon: Wallet,
           accent: 'neutral',
         },
         {
           label: 'Monthly Generation',
           value: `${formatNum(results.monthlyGeneration, 0)} units`,
-          sub: `${formatNum(results.systemSize)} kW × 5 units/day × 30`,
           icon: Sun,
           accent: 'neutral',
         },
         {
           label: 'Monthly Savings',
           value: formatINR(results.monthlySavings),
-          sub: `${formatNum(results.monthlyGeneration, 0)} units × ₹7`,
           icon: Zap,
           accent: 'primary',
         },
         {
           label: 'Annual Savings',
           value: formatINR(results.annualSavings),
-          sub: 'Monthly savings × 12',
           icon: TrendingUp,
           accent: 'accent',
         },
         {
           label: 'Payback Period',
           value: `${formatNum(results.paybackYears)} yrs`,
-          sub: 'Cost ÷ Annual savings',
           icon: CalendarClock,
           accent: 'accent',
         },
@@ -355,7 +349,6 @@ export default function Calculator() {
                           </div>
                           <div className="calc-result-label">{card.label}</div>
                           <div className="calc-result-value">{card.value}</div>
-                          <div className="calc-result-sub">{card.sub}</div>
                         </motion.article>
                       );
                     })}

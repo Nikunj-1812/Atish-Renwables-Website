@@ -2596,22 +2596,15 @@ main {
     padding-bottom: 4px;
     max-width: 100%;
     width: 100%;
-    /* Hide default scrollbar but keep scroll functionality */
-    scrollbar-width: thin;
-    scrollbar-color: rgba(15, 106, 115, 0.25) transparent;
+    /* Hide scrollbar completely */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   .requirement-options::-webkit-scrollbar {
-    height: 3px;
-  }
-
-  .requirement-options::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .requirement-options::-webkit-scrollbar-thumb {
-    background: rgba(15, 106, 115, 0.25);
-    border-radius: 999px;
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .requirement-option {
@@ -3158,26 +3151,19 @@ main {
   background: rgba(255, 255, 255, 0.26);
 }
 
-/* Responsive: stack buttons on small screens */
+/* Responsive: keep buttons in one row on all screen sizes, just tighten sizing */
 @media (max-width: 480px) {
   .cta__actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    width: 100%;
-  }
-
-  .cta__actions > * {
-    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
   }
 
   .cta__btn-call {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .cta__call-wrap {
-    width: 100%;
+    padding: 11px 16px;
+    font-size: 0.85rem;
+    white-space: nowrap;
   }
 }
 

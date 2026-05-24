@@ -506,7 +506,7 @@ main {
 .panel,
 .form-card,
 .hero-card {
-  border-radius: var(--radius-xl);
+  border-radius: var(--r-xl);
 }
 
 .grid-responsive {
@@ -1309,6 +1309,7 @@ main {
   overflow: hidden;
   padding: 56px 0 48px;
   min-height: 400px;
+  border-radius: var(--r-xl);
   /* Ensure a stable background color while hero background image loads/animates
      Prevents a flash of light/white when navigating between pages */
   background-color: #071e1c;
@@ -1518,7 +1519,7 @@ main {
 .hero-stat {
   position: relative;
   padding: 18px 16px 16px;
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(15, 106, 115, 0.1);
   box-shadow: 0 8px 28px rgba(15, 106, 115, 0.1), 0 2px 8px rgba(0,0,0,0.06);
@@ -2088,6 +2089,7 @@ main {
   overflow: hidden;
   color: white;
   background: linear-gradient(180deg, #005058 0%, #001f23 100%);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
 }
 
 .footer__overlay {
@@ -2661,7 +2663,7 @@ main {
   .team-card,
   .process-card,
   .stat-card {
-    border-radius: 22px;
+    border-radius: var(--r-xl);
   }
 
   .section,
@@ -3176,7 +3178,7 @@ main {
 
   .hero-stat {
     padding: 14px 10px 12px;
-    border-radius: 14px;
+    border-radius: var(--r-lg);
   }
 
   .hero-stat__icon {
@@ -3221,7 +3223,7 @@ main {
 
   .hero-stat {
     padding: 12px 8px 10px;
-    border-radius: 12px;
+    border-radius: var(--r-lg);
   }
 
   .hero-stat__icon {

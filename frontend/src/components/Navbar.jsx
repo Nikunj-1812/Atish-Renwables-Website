@@ -70,8 +70,8 @@ export default function Navbar() {
               {item.label}
             </NavLink>
           ))}
-          <Button to="/contact" variant="accent" className="w-full" onClick={handleLinkClick}>
-            <Phone size={16} />
+          <Button to="/contact" variant="accent" onClick={handleLinkClick}>
+            <Phone size={14} />
             Get a Quote
           </Button>
         </div>

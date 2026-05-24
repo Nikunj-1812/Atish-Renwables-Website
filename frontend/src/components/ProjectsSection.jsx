@@ -310,8 +310,8 @@ function ProjectsSection({ projectData }) {
           copy="Industrial, commercial, and residential installations designed for performance, reliability, and clean execution."
         />
 
-        {/* Filter chips */}
-        <div className="chip-group" style={{ justifyContent: 'center', marginBottom: 32, flexWrap: 'wrap' }}>
+        {/* Filter chips — desktop */}
+        <div className="chip-group projects-filter-chips" style={{ justifyContent: 'center', marginBottom: 32, flexWrap: 'wrap' }}>
           {projectFilters.map((filter) => (
             <button
               key={filter}
@@ -322,6 +322,21 @@ function ProjectsSection({ projectData }) {
               {filter}
             </button>
           ))}
+        </div>
+
+        {/* Filter dropdown — mobile */}
+        <div className="projects-filter-select-wrap">
+          <select
+            id="projectFilterSelect"
+            className="projects-filter-select"
+            value={activeFilter}
+            onChange={(e) => setActiveFilter(e.target.value)}
+            aria-label="Filter projects by category"
+          >
+            {projectFilters.map((filter) => (
+              <option key={filter} value={filter}>{filter}</option>
+            ))}
+          </select>
         </div>
 
         {/* ── Featured hero card ── */}

@@ -18,8 +18,8 @@ export default function Home() {
         priority={true}
         actions={[
           { label: 'Get Free Quote', to: '/contact', variant: 'primary', icon: 'arrow' },
-          { label: 'Calculate Savings', to: '/calculator', variant: 'secondary' },
-          { label: 'Download Brochure', href: '/assets/brochure.pdf', download: true, variant: 'secondary', icon: 'download' },
+          { label: 'Calculate Savings', to: '/calculator', variant: 'ghost' },
+          { label: 'Download Brochure', href: '/assets/brochure.pdf', download: true, variant: 'ghost', icon: 'download' },
         ]}
         stats={heroStats}
       />

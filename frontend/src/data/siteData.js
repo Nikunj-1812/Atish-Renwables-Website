@@ -18,9 +18,9 @@ export const socialLinks = [
 ];
 
 export const heroStats = [
-  { value: '15+', label: 'Years Experience' },
-  { value: '500+', label: 'Projects Delivered' },
-  { value: '120 MW', label: 'Installed Capacity' },
+  { value: '5+', label: 'Years Experience', icon: 'award' },
+  { value: '500+', label: 'Projects Delivered', icon: 'zap' },
+  { value: '2.5+ MW', label: 'Installed Capacity', icon: 'sun' },
 ];
 
 export const aboutHighlights = [

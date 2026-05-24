@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, MapPin, PanelTop, Share2, Sparkles } from 'lucide-react';
 import Loader from '../components/Loader';
@@ -74,28 +74,27 @@ export default function ProjectDetail() {
   return (
     <motion.section className="section" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}>
       <div className="container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
-          <Button to="/projects" variant="secondary">
-            <ArrowLeft size={16} />
-            Back to Projects
+        <div className="project-detail-nav">
+          <Button to="/projects" variant="secondary" className="btn-icon project-detail-nav__btn" aria-label="Back to Projects">
+            <ArrowLeft size={20} />
           </Button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-secondary btn-icon project-detail-nav__btn"
+            aria-label="Share Project"
             onClick={() => navigator?.share ? navigator.share({ title: project.projectName, text: project.description }) : null}
           >
-            <Share2 size={16} />
-            Share Project
+            <Share2 size={20} />
           </button>
         </div>
 
-        <article className="panel" style={{ overflow: 'hidden' }}>
-          <div className="split split--2" style={{ gap: 0, alignItems: 'stretch' }}>
-            <div className="media-frame media-frame--cover" style={{ minHeight: '100%', height: '100%' }}>
+        <article className="panel project-detail-hero" style={{ overflow: 'hidden' }}>
+          <div className="split split--2 project-detail-split" style={{ gap: 0, alignItems: 'stretch' }}>
+            <div className="media-frame media-frame--cover project-detail-media">
               <img src={project.imageUrl} alt={project.projectName} loading="eager" fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
 
-            <div style={{ padding: '28px 32px', display: 'grid', gap: 16, alignContent: 'start' }}>
+            <div className="project-detail-content">
               <span className="pill" style={{ width: 'fit-content', background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
                 Featured Case Study
               </span>
@@ -141,16 +140,16 @@ export default function ProjectDetail() {
           </div>
         </article>
 
-        <section className="section section--tight" style={{ paddingBottom: 0 }}>
+        <section className="section section--tight project-detail-body">
           <div className="grid-responsive grid-2">
-            <article className="panel" style={{ padding: 28 }}>
+            <article className="panel project-detail-panel">
               <h2 className="service-card__title">Project Overview</h2>
               <p className="text-muted" style={{ marginBottom: 0, lineHeight: 1.8 }}>
                 {project.description}
               </p>
             </article>
 
-            <article className="panel" style={{ padding: 28 }}>
+            <article className="panel project-detail-panel">
               <h2 className="service-card__title">Case Study</h2>
               <p className="text-muted" style={{ marginBottom: 16, lineHeight: 1.8 }}>
                 {caseStudy}
@@ -161,8 +160,8 @@ export default function ProjectDetail() {
                   'Layout planning and installation coordination',
                   'Performance-optimized commissioning',
                 ].map((item) => (
-                  <div key={item} className="stack-item" style={{ padding: '10px 14px' }}>
-                    <div className="stack-item__icon" style={{ width: 36, height: 36 }}>
+                  <div key={item} className="stack-item project-detail-checklist-item">
+                    <div className="stack-item__icon" style={{ width: 36, height: 36, flexShrink: 0 }}>
                       <CheckCircle2 size={16} />
                     </div>
                     <span>{item}</span>

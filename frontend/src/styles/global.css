@@ -6,9 +6,12 @@
   --surface-soft: #eef5f7;
   --surface-alt: #e8eff1;
   --surface-strong: #dce8eb;
+  --fg: #142126;
   --text: #142126;
   --muted: #4a5b61;
+  --border: rgba(15, 106, 115, 0.14);
   --line: rgba(15, 106, 115, 0.12);
+  --surface-2: rgba(15, 106, 115, 0.04);
   --primary: #005058;
   --primary-strong: #0f6a73;
   --accent: #fdbc13;
@@ -16,9 +19,18 @@
   --success: #25d366;
   --shadow: 0 18px 50px rgba(15, 106, 115, 0.08);
   --shadow-soft: 0 10px 30px rgba(15, 106, 115, 0.05);
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
-  --radius-pill: 999px;
+
+  /* ── Unified border-radius scale ── */
+  --r-sm:   8px;   /* close btn, icon badge, send btn, small UI */
+  --r-md:   12px;  /* inputs, chatbot window, mobile panel, small cards */
+  --r-lg:   16px;  /* cards, panels, result cards, stat cards */
+  --r-xl:   22px;  /* large cards, hero panels, featured card, CTA */
+  --r-pill: 999px; /* buttons, chips, tags, badges */
+
+  /* Legacy aliases — kept for backward compat, map to new scale */
+  --radius-xl:   var(--r-xl);
+  --radius-2xl:  var(--r-xl);
+  --radius-pill: var(--r-pill);
 }
 
 /* Chatbot widget styles */
@@ -51,7 +63,7 @@
   max-width: calc(100vw - 36px);
   height: 460px; /* reduced height for compact layout */
   background: #ffffff; /* plain white background requested */
-  border-radius: 12px;
+  border-radius: var(--r-md);
   border: 1px solid rgba(15,106,115,0.04);
   box-shadow: 0 22px 48px rgba(2, 40, 45, 0.10);
   overflow: hidden;
@@ -84,7 +96,7 @@
 .chatbot-title { font-weight: 800; color: var(--primary-strong); font-size: 0.95rem; }
 .chatbot-sub { font-size: 0.75rem; color: var(--muted); }
 
-.chatbot-close { background: transparent; border: 0; color: var(--muted); padding: 6px; border-radius: 8px; cursor: pointer; position: absolute; right: 8px; top: 8px; }
+.chatbot-close { background: transparent; border: 0; color: var(--muted); padding: 6px; border-radius: var(--r-sm); cursor: pointer; position: absolute; right: 8px; top: 8px; }
 .chatbot-close:hover { background: rgba(15,106,115,0.03); transform: translateY(-2px); }
 
 /* Ensure close button doesn't overlap on small headers */
@@ -99,7 +111,7 @@
 .chatbot-msg.bot { justify-content: flex-start; }
 .chatbot-msg.user { justify-content: flex-end; }
 .chatbot-bubble {
-  max-width: 78%; padding: 8px 12px; border-radius: 12px; font-size: 0.94rem; line-height: 1.28; box-shadow: 0 6px 18px rgba(15,106,115,0.03);
+  max-width: 78%; padding: 8px 12px; border-radius: var(--r-md); font-size: 0.94rem; line-height: 1.28; box-shadow: 0 6px 18px rgba(15,106,115,0.03);
 }
 .chatbot-msg.bot .chatbot-bubble { background: rgba(255,255,255,0.8); color: var(--text); border: 1px solid rgba(15,106,115,0.04); }
 .chatbot-msg.user .chatbot-bubble { background: linear-gradient(135deg,var(--primary),var(--primary-strong)); color: #fff; }
@@ -107,23 +119,23 @@
 
 
 .chatbot-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid rgba(15,106,115,0.04); }
-.chatbot-input input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(15,106,115,0.06); background: rgba(255,255,255,0.96); }
-.chatbot-send { background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: #fff; border-radius: 8px; padding: 8px 12px; font-weight: 800; }
+.chatbot-input input { flex: 1; min-width: 0; padding: 10px 12px; border-radius: var(--r-md); border: 1px solid rgba(15,106,115,0.06); background: rgba(255,255,255,0.96); }
+.chatbot-send { background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: #fff; border-radius: var(--r-sm); padding: 8px 12px; font-weight: 800; }
 
 .chatbot-footer { padding: 10px; border-top: 1px solid rgba(15,106,115,0.04); display: flex; justify-content: center; }
-.chatbot-whatsapp-icon { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 10px; background: linear-gradient(135deg, #25d366, #12b04a); box-shadow: 0 10px 30px rgba(37,211,102,0.16); }
+.chatbot-whatsapp-icon { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: var(--r-sm); background: linear-gradient(135deg, #25d366, #12b04a); box-shadow: 0 10px 30px rgba(37,211,102,0.16); }
 .chatbot-whatsapp-icon svg { display: block; }
 
 
 @media (max-width: 640px) {
-  .chatbot-window { width: calc(100vw - 28px); height: 60vh; right: 12px; bottom: 78px; border-radius: 12px; }
+  .chatbot-window { width: calc(100vw - 28px); height: 60vh; right: 12px; bottom: 78px; border-radius: var(--r-md); }
   .chatbot-root { right: 20px; bottom: 20px; }
   .chatbot-button { width: 64px; height: 64px; }
-  .chatbot-whatsapp-icon { width: 52px; height: 52px; border-radius: 12px; }
+  .chatbot-whatsapp-icon { width: 52px; height: 52px; border-radius: var(--r-md); }
 }
 
 /* Icon-only button variant for site */
-.btn.btn-icon { width: 48px; height: 48px; padding: 0; display: inline-grid; place-items: center; border-radius: 12px; }
+.btn.btn-icon { width: 48px; height: 48px; padding: 0; display: inline-grid; place-items: center; border-radius: var(--r-md); }
 .btn.btn-icon svg { display: block; }
 
 * {
@@ -173,13 +185,13 @@ html, body, .app-shell { max-width: 100%; overflow-x: hidden; }
   background: rgba(255,255,255,0.9);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-soft);
-  border-radius: var(--radius-xl);
-  overflow: hidden; /* clips the image to rounded corners */
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
 .project-card:hover {
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-4px) scale(1.015);
   box-shadow: var(--shadow);
 }
 
@@ -191,75 +203,100 @@ html, body, .app-shell { max-width: 100%; overflow-x: hidden; }
   overflow: hidden;
   background: var(--surface-alt);
   flex-shrink: 0;
+  /* Top corners match the card, bottom is flat (body sits below) */
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
 }
 
-/* Zoom image on card hover */
+/* Image fills the media frame and zooms on hover */
+.project-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 420ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
 .project-card:hover .project-card__media img {
-  transform: scale(1.06);
+  transform: scale(1.07);
 }
 
 /* Card body */
 .project-card__body {
-  padding: 18px;
+  padding: 16px 18px 18px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
 }
 
 .project-card__title {
   margin: 0;
   font-family: 'Manrope', sans-serif;
-  font-size: 1.08rem;
+  font-size: 1.02rem;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
   color: var(--text);
 }
 
 .project-card__location {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
 }
 
 .project-card__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 14px;
+  padding-top: 12px;
   margin-top: auto;
-  border-top: 1px solid rgba(15,106,115,0.1);
+  border-top: 1px solid rgba(15,106,115,0.08);
 }
 
 .project-card__label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
-  font-weight: 800;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .project-card__value {
   font-family: 'Manrope', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--primary-strong);
   font-weight: 800;
   line-height: 1.2;
 }
 
+/* CTA arrow button — visible teal circle */
 .project-card__cta {
-  min-width: 40px;
-  min-height: 40px;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   flex-shrink: 0;
+  background: rgba(15, 106, 115, 0.08) !important;
+  border: 1.5px solid rgba(15, 106, 115, 0.18) !important;
+  color: var(--primary-strong) !important;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease !important;
+}
+
+.project-card__cta:hover {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+  transform: translateX(2px) !important;
 }
 
 /* Mega card accent border */
@@ -342,11 +379,11 @@ html, body, .app-shell { max-width: 100%; overflow-x: hidden; }
   }
 
   .project-card__body {
-    padding: 14px;
+    padding: 12px 14px 14px;
   }
 
   .project-card__title {
-    font-size: 1rem;
+    font-size: 0.96rem;
   }
 }
 
@@ -752,7 +789,7 @@ main {
   grid-template-columns: 1fr 1fr;
   gap: 0;
   border: 1.5px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   overflow: hidden;
 }
 
@@ -791,7 +828,7 @@ main {
   display: flex;
   align-items: center;
   border: 1.5px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   overflow: hidden;
   background: var(--surface);
   transition: border-color 0.18s;
@@ -876,7 +913,7 @@ main {
   gap: 12px;
   background: color-mix(in srgb, var(--primary) 8%, transparent);
   border: 1.5px solid color-mix(in srgb, var(--primary) 30%, transparent);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 14px 16px;
 }
 
@@ -927,7 +964,7 @@ main {
   background: color-mix(in srgb, var(--primary) 12%, transparent);
   color: var(--primary-strong, var(--primary));
   border: 1.5px solid color-mix(in srgb, var(--primary) 25%, transparent);
-  border-radius: 20px;
+  border-radius: var(--r-pill);
   padding: 4px 12px;
 }
 
@@ -940,7 +977,7 @@ main {
 
 /* Individual result card */
 .calc-result-card {
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   padding: 16px 14px;
   text-align: center;
   display: flex;
@@ -952,7 +989,7 @@ main {
 .calc-result-icon-wrap {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   background: var(--surface-2, rgba(0,0,0,0.05));
   display: flex;
   align-items: center;
@@ -1209,7 +1246,7 @@ main {
   display: none;
   width: 44px;
   height: 44px;
-  border-radius: 14px;
+  border-radius: var(--r-md);
   background: rgba(15, 106, 115, 0.08);
   color: var(--primary-strong);
 }
@@ -1224,7 +1261,7 @@ main {
   top: calc(100% + 8px);
   width: 200px;
   background: rgba(255, 255, 255, 0.98);
-  border-radius: 14px;
+  border-radius: var(--r-md);
   box-shadow: 0 12px 36px rgba(2, 40, 45, 0.1), 0 2px 8px rgba(0,0,0,0.06);
   z-index: 70;
   border: 1px solid rgba(15, 106, 115, 0.08);
@@ -1237,7 +1274,7 @@ main {
 
 .mobile-panel .nav-link {
   padding: 9px 12px;
-  border-radius: 9px;
+  border-radius: var(--r-sm);
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--muted);
@@ -1264,7 +1301,7 @@ main {
   width: 100%;
   justify-content: center;
   margin: 6px 0 0;
-  border-radius: 9px;
+  border-radius: var(--r-sm);
 }
 
 .hero {
@@ -2983,6 +3020,7 @@ main {
   .project-card__media {
     aspect-ratio: 16 / 9;
     width: 100%;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
   }
 }
 

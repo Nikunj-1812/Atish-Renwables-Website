@@ -175,7 +175,7 @@ function FeaturedCard({ project }) {
     >
       {/* Image — fills left half on desktop, full width on mobile */}
       <div className="featured-project-card__media">
-        <ProjectImage src={project.imageUrl} alt={project.projectName} />
+        <ProjectImage src={project.imageUrl || project.image} alt={project.projectName} />
         <span
           className="pill"
           style={{

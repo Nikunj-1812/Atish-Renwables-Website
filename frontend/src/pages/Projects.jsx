@@ -31,23 +31,17 @@ export default function Projects() {
           } catch (e) {}
         }
       } catch (error) {
-        console.error('Projects fetch error:', error);
+        // silently use cached/fallback data
       }
     };
 
     loadProjects();
 
-    const refreshOnFocus = () => {
-      loadProjects();
-    };
-
-    // Auto-refresh throttled to 15s to prevent high CPU / server load.
-    const interval = setInterval(loadProjects, 15000);
+    const refreshOnFocus = () => { loadProjects(); };
     window.addEventListener('focus', refreshOnFocus);
 
     return () => {
       mounted = false;
-      clearInterval(interval);
       window.removeEventListener('focus', refreshOnFocus);
     };
   }, []);

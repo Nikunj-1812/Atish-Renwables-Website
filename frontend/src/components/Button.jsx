@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { buttonHover } from '../utils/motion';
 
+// Define motion components at module level — avoids remounting on every render
+const MotionLink = motion(Link);
+const MotionA = motion('a');
+const MotionButton = motion('button');
+
 export default function Button({ to, href, variant = 'primary', className = '', children, ...props }) {
   const classes = `btn btn-${variant} ${className}`.trim();
-  const MotionLink = motion(Link);
-  const MotionA = motion('a');
-  const MotionButton = motion('button');
 
   if (to) {
     return (

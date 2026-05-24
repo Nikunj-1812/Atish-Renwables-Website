@@ -91,7 +91,7 @@ export default function ProjectDetail() {
         <article className="panel project-detail-hero" style={{ overflow: 'hidden' }}>
           <div className="split split--2 project-detail-split" style={{ gap: 0, alignItems: 'stretch' }}>
             <div className="media-frame media-frame--cover project-detail-media">
-              <img src={project.imageUrl} alt={project.projectName} loading="eager" fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={project.imageUrl || project.image} alt={project.projectName} loading="eager" fetchPriority="high" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
 
             <div className="project-detail-content">

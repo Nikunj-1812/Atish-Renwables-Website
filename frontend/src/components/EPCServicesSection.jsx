@@ -108,10 +108,11 @@ function EPCServicesSection({ servicesData }) {
           copy="End-to-end solar solutions designed for efficiency, reliability, and long-term performance."
         />
         <motion.div
-          className="epc-services-grid block"
+          className="epc-services-grid"
           variants={staggerContainer}
-          initial={false}
-          animate="show"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.1 }}
         >
           {visibleServices.length > 0 ? visibleServices.map((service) => {
             const IconComponent = service.icon;

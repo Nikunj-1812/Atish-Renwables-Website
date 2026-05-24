@@ -17,13 +17,10 @@ export default function About() {
       try {
         const response = await getTeam();
         const teamData = response?.data?.teamMembers || response?.teamMembers || [];
-        console.log('Team API response:', response);
-        console.log('Team members:', teamData);
         if (mounted) {
           setTeamMembers(teamData);
         }
       } catch (error) {
-        console.error('Team fetch error:', error);
         if (mounted) {
           setTeamMembers([]);
         }
@@ -36,17 +33,11 @@ export default function About() {
 
     loadTeam();
 
-    const refreshOnFocus = () => {
-      loadTeam();
-    };
-
-    // Auto-refresh frequently so CRM changes show up quickly.
-    const interval = setInterval(loadTeam, 5000);
+    const refreshOnFocus = () => { loadTeam(); };
     window.addEventListener('focus', refreshOnFocus);
 
     return () => {
       mounted = false;
-      clearInterval(interval);
       window.removeEventListener('focus', refreshOnFocus);
     };
   }, []);

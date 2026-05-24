@@ -19,7 +19,7 @@ export default function Home() {
         actions={[
           { label: 'Get Free Quote', to: '/contact', variant: 'primary', icon: 'arrow' },
           { label: 'Calculate Savings', to: '/calculator', variant: 'ghost' },
-          { label: 'Download Brochure', href: '/assets/brochure.pdf', download: true, variant: 'ghost', icon: 'download' },
+          { label: 'Download Brochure', href: '/assets/Atish%20Renewables%20Brochure.pdf', download: true, variant: 'ghost', icon: 'download' },
         ]}
         stats={heroStats}
       />

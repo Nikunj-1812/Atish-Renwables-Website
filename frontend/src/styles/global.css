@@ -2089,7 +2089,8 @@ main {
   overflow: hidden;
   color: white;
   background: linear-gradient(180deg, #005058 0%, #001f23 100%);
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  border-radius: var(--r-xl);
+  margin-bottom: 12px;
 }
 
 .footer__overlay {

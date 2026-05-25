@@ -31,7 +31,7 @@ function ServicesSection() {
                   <h3 className="service-card__title" style={{ marginBottom: 10 }}>{service.title}</h3>
                   <p className="text-muted" style={{ marginBottom: 20 }}>{service.text}</p>
                   <div>
-                    <Button to="/services" variant="secondary">
+                    <Button to="/projects" variant="secondary">
                       Explore
                       <ArrowRight size={16} />
                     </Button>

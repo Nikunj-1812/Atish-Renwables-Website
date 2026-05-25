@@ -24,7 +24,7 @@ export const heroStats = [
 ];
 
 export const aboutHighlights = [
-  '15+ years of field-tested EPC delivery',
+  '5+ years of field-tested EPC delivery',
   '500+ successful solar installations',
   'End-to-end engineering, procurement, and commissioning',
   'Dedicated support through commissioning and beyond',

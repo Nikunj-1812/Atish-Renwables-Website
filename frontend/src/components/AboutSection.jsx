@@ -39,7 +39,7 @@ export default function AboutSection() {
             </motion.div>
 
             <div style={{ marginTop: 24 }} className="about-cta">
-              <Button to="/about" variant="secondary">
+              <Button to="/services" variant="secondary">
                 Learn More
               </Button>
             </div>

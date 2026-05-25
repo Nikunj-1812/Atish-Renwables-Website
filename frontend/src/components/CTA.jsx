@@ -1,18 +1,6 @@
-import { ArrowRight, Phone } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from './Button';
-
-const PHONE_NUMBER = 'tel:+916359260330';
-const PHONE_DISPLAY = '+91 63592 60330';
-
-// Subtle pulse ring for the call button
-const pulseVariants = {
-  animate: {
-    scale: [1, 1.18, 1],
-    opacity: [0.55, 0, 0.55],
-    transition: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' },
-  },
-};
 
 // Stagger children into view
 const innerVariants = {
@@ -108,24 +96,6 @@ export default function CTA() {
                 Get Free Quote
                 <ArrowRight size={16} />
               </Button>
-
-              {/* Call Now */}
-              <div className="cta__call-wrap">
-                <motion.span
-                  className="cta__call-pulse"
-                  variants={pulseVariants}
-                  animate="animate"
-                  aria-hidden="true"
-                />
-                <a
-                  href={PHONE_NUMBER}
-                  className="cta__btn-call"
-                  aria-label={`Call us at ${PHONE_DISPLAY}`}
-                >
-                  <Phone size={17} />
-                  Call Now
-                </a>
-              </div>
             </motion.div>
           </motion.div>
         </motion.div>

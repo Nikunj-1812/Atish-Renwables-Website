@@ -24,13 +24,13 @@ function ServicesSection() {
                   <img alt={service.title} src={service.image} loading="lazy" />
                 </div>
                 <div className="service-card__body">
-                  <span className="pill" style={{ background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)' }}>
+                  <span className="pill" style={{ background: 'rgba(15,106,115,0.08)', color: 'var(--primary-strong)', display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 14 }}>
                     <service.icon size={16} />
                     {service.tag}
                   </span>
-                  <h3 className="service-card__title">{service.title}</h3>
-                  <p className="text-muted">{service.text}</p>
-                  <div style={{ marginTop: 18 }}>
+                  <h3 className="service-card__title" style={{ marginBottom: 10 }}>{service.title}</h3>
+                  <p className="text-muted" style={{ marginBottom: 20 }}>{service.text}</p>
+                  <div>
                     <Button to="/services" variant="secondary">
                       Explore
                       <ArrowRight size={16} />

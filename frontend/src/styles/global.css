@@ -1910,7 +1910,14 @@ main {
 .team-card__body,
 .process-card__body,
 .stat-card__body {
-  padding: 18px;
+  padding: 20px 18px 22px;
+}
+
+.service-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
 }
 
 .team-card__body {

@@ -1344,25 +1344,25 @@ main {
   will-change: opacity, transform;
 }
 
-/* Overlay sits above the image and fades out quickly to avoid framebuffer/paint flashes
-   when navigating between pages. Keeps hero tone consistent while image decodes. */
+/* Overlay: starts as a solid dark tone to prevent flash while image loads,
+   then settles to a persistent semi-transparent black so text stays readable. */
 .hero__overlay {
   position: absolute;
   inset: 0;
   z-index: 1; /* above image, below content */
-  background-color: rgba(7, 30, 28, 0.95);
+  background-color: rgba(0, 0, 0, 0.55);
   pointer-events: none;
   animation: overlayFade 220ms ease-out 40ms forwards;
 }
 
 @keyframes overlayFade {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from { opacity: 1; background-color: rgba(7, 30, 28, 0.95); }
+  to   { opacity: 1; background-color: rgba(0, 0, 0, 0.55); }
 }
 
 .hero__content {
   position: relative;
-  z-index: 1;
+  z-index: 2; /* above the overlay */
   display: grid;
   gap: 16px;
   justify-items: start;
@@ -1413,7 +1413,7 @@ main {
 
 .hero__copy {
   max-width: 620px;
-  color: rgba(255, 255, 255, 0.82);
+  color: #ffffff;
   font-size: 1.12rem;
   line-height: 1.8;
 }
@@ -1446,20 +1446,20 @@ main {
   font-weight: 700;
 }
 
-/* ── Ghost button — white frosted, for use on dark hero backgrounds ── */
+/* ── Ghost button — solid white, for use on dark hero backgrounds ── */
 .btn-ghost {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.38);
+  color: #1a1a1a;
+  background: #ffffff;
+  border: 1.5px solid #ffffff;
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 
 .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.62);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
-  color: #fff;
+  background: #f0f0f0;
+  border-color: #f0f0f0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+  color: #1a1a1a;
 }
 
 @media (max-width: 768px) {

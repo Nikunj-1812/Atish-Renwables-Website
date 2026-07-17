@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+let isConnected = false;
+
 const connectDB = async () => {
   const mongoUri = process.env.MONGO_URI;
 
@@ -12,12 +14,20 @@ const connectDB = async () => {
   }
 
   try {
-    await mongoose.connect(mongoUri);
+    await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 3000,
+    });
+    isConnected = true;
     console.log('MongoDB connected successfully');
   } catch (error) {
-    console.error(`MongoDB connection error: ${error.message}`);
-    throw error;
+    console.warn(`⚠️ MongoDB connection failed (serverSelectionTimeoutMS: 3s): ${error.message}`);
+    console.warn('⚠️ Server will operate in resilient offline mode. Lead CRM records will be logged to system console.');
   }
 };
 
-module.exports = connectDB;
+const getIsConnected = () => isConnected;
+
+module.exports = {
+  connectDB,
+  getIsConnected,
+};

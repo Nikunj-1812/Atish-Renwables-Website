@@ -3,7 +3,7 @@
  * Centralizes all API calls with error handling and loading states
  */
 
-const API_URL =
+export const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_ADMIN_API_URL ||
   'https://atish-renwables-website.onrender.com/api';
@@ -74,6 +74,18 @@ export async function submitContactForm(formData) {
  */
 export async function calculateSolarEstimate(payload) {
   return apiCall('/solar/calculate', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * Send PDF report via email
+ * @param {object} payload - Calculation parameters
+ * @returns {Promise<{success: boolean, data: any, error: string|null}>}
+ */
+export async function emailSolarReport(payload) {
+  return apiCall('/solar/email-report', {
     method: 'POST',
     body: JSON.stringify(payload),
   });

@@ -1,7 +1,10 @@
 const { Lead } = require('../models');
 const { validateSolarPayload } = require('../utils/requestValidators');
 const { calculateSolarEstimateData } = require('../services/solarService');
+const { generateSolarReportPdf } = require('../services/pdfService');
+const { sendSolarReportEmail } = require('../services/emailService');
 const { sendError, sendSuccess } = require('../utils/apiResponse');
+const { getIsConnected } = require('../config/db');
 
 const calculateSolarEstimate = async (req, res) => {
   try {
@@ -10,12 +13,19 @@ const calculateSolarEstimate = async (req, res) => {
     if (invalidFields.length > 0) {
       return sendError(res, {
         statusCode: 400,
-        message: 'pincode and monthlyElectricityBill must be valid.',
+        message: 'Pincode and monthly bill / input value must be valid.',
         errors: invalidFields,
       });
     }
 
     const estimate = calculateSolarEstimateData(req.body);
+
+    if (!estimate) {
+      return sendError(res, {
+        statusCode: 400,
+        message: 'Invalid calculation inputs.',
+      });
+    }
 
     // Save as CRM Lead if name and phone are provided
     if (req.body.name && req.body.phone) {
@@ -29,16 +39,23 @@ const calculateSolarEstimate = async (req, res) => {
         cityValue = isNumericPincode ? `Pincode: ${req.body.pincode.trim()}` : req.body.pincode.trim();
       }
 
-      await Lead.create({
+      const leadPayload = {
         name: req.body.name.trim(),
         phone: req.body.phone.trim(),
-        email: 'calculator',
+        email: req.body.email ? req.body.email.trim() : 'calculator',
         city: cityValue,
-        requirement: 'residential',
-        monthlyBill: Number(req.body.monthlyElectricityBill),
-        message: `Solar Calculator Estimate Submission. Input: ${req.body.pincode.trim()}.${!isDefaultLoc ? ` Matched Location: ${estimate.location}.` : ''}`,
-        notes: `Estimate Details:\n- System Size: ${estimate.systemSizeKw} kW\n- Estimated Cost: ₹${estimate.totalCost}\n- Payback Period: ${estimate.paybackPeriodYears} years\n- Monthly Savings: ₹${estimate.monthlySavings}\n- Yearly Savings: ₹${estimate.yearlySavings}`,
-      });
+        requirement: req.body.customerType === 'commercial' ? 'commercial' : 'residential',
+        monthlyBill: Number(estimate.monthlyElectricityBill),
+        message: `Solar Calculator Estimate Submission. Input Mode: ${req.body.inputMode || 'bill'}. Pincode: ${req.body.pincode.trim()}.${!isDefaultLoc ? ` Matched Location: ${estimate.location}.` : ''}`,
+        notes: `Estimate Details:\n- Input Mode: ${req.body.inputMode || 'bill'}\n- System Size: ${estimate.systemSizeKw} kW\n- Gross Cost: ₹${estimate.grossCost}\n- Subsidy: ₹${estimate.subsidy}\n- Net Cost: ₹${estimate.netCost}\n- Payback Period: ${estimate.paybackPeriodYears} years\n- Monthly Savings: ₹${estimate.monthlySavings}\n- Yearly Savings: ₹${estimate.yearlySavings}\n- ROI: ${estimate.roi}%\n- Environmental Score: ${estimate.environmentalScore}/100`,
+      };
+
+      if (getIsConnected()) {
+        await Lead.create(leadPayload);
+      } else {
+        console.warn('⚠️ Offline Database Mode: Skipped database insertion. CRM Lead details logged to console:');
+        console.dir(leadPayload);
+      }
     }
 
     return sendSuccess(res, {
@@ -64,6 +81,144 @@ const calculateSolarEstimate = async (req, res) => {
   }
 };
 
+const downloadPdfReport = async (req, res) => {
+  try {
+    const {
+      inputMode,
+      inputValue,
+      electricityRate,
+      customerType,
+      pincode,
+      state,
+      applySubsidy,
+      name,
+      phone,
+      email,
+    } = req.query;
+
+    const parsedApplySubsidy = applySubsidy === undefined ? true : (applySubsidy === 'true' || applySubsidy === true);
+
+    const estimate = calculateSolarEstimateData({
+      inputMode,
+      inputValue: parseFloat(inputValue),
+      electricityRate: parseFloat(electricityRate),
+      customerType,
+      pincode,
+      applySubsidy: parsedApplySubsidy,
+    });
+
+    if (!estimate) {
+      return sendError(res, {
+        statusCode: 400,
+        message: 'Invalid parameters for PDF report.',
+      });
+    }
+
+    const reportData = {
+      ...estimate,
+      name: name || 'Valued Customer',
+      phone: phone || 'N/A',
+      email: email || '',
+      state: state || 'Gujarat',
+      pincode: pincode || 'N/A',
+    };
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="Atish_Renewables_Solar_Report_${estimate.systemSizeKw}kW.pdf"`);
+
+    generateSolarReportPdf(reportData, res);
+  } catch (error) {
+    return sendError(res, {
+      statusCode: 500,
+      message: error.message || 'Failed to generate PDF report.',
+      errors: [error.message],
+    });
+  }
+};
+
+const emailReport = async (req, res) => {
+  try {
+    const {
+      inputMode,
+      inputValue,
+      electricityRate,
+      customerType,
+      pincode,
+      state,
+      applySubsidy,
+      name,
+      phone,
+      email,
+    } = req.body;
+
+    if (!email) {
+      return sendError(res, {
+        statusCode: 400,
+        message: 'Email address is required to send report.',
+      });
+    }
+
+    const parsedApplySubsidy = applySubsidy === undefined ? true : (applySubsidy === 'true' || applySubsidy === true);
+
+    const estimate = calculateSolarEstimateData({
+      inputMode,
+      inputValue: parseFloat(inputValue),
+      electricityRate: parseFloat(electricityRate),
+      customerType,
+      pincode,
+      applySubsidy: parsedApplySubsidy,
+    });
+
+    if (!estimate) {
+      return sendError(res, {
+        statusCode: 400,
+        message: 'Invalid parameters for email report.',
+      });
+    }
+
+    const reportData = {
+      ...estimate,
+      name: name || 'Valued Customer',
+      phone: phone || 'N/A',
+      email: email || '',
+      state: state || 'Gujarat',
+      pincode: pincode || 'N/A',
+    };
+
+    const doc = new (require('pdfkit'))({ margin: 50, size: 'A4' });
+    const buffers = [];
+    doc.on('data', buffers.push.bind(buffers));
+    doc.on('end', async () => {
+      try {
+        const pdfBuffer = Buffer.concat(buffers);
+        const emailResult = await sendSolarReportEmail(email, reportData, pdfBuffer);
+        return sendSuccess(res, {
+          statusCode: 200,
+          message: 'Solar report email sent successfully.',
+          data: emailResult,
+        });
+      } catch (emailErr) {
+        console.error('Email Dispatch Error:', emailErr);
+        return sendError(res, {
+          statusCode: 500,
+          message: 'Failed to send email report.',
+          errors: [emailErr.message],
+        });
+      }
+    });
+
+    generateSolarReportPdf(reportData, doc);
+  } catch (error) {
+    return sendError(res, {
+      statusCode: 500,
+      message: error.message || 'Failed to email report.',
+      errors: [error.message],
+    });
+  }
+};
+
 module.exports = {
   calculateSolarEstimate,
+  downloadPdfReport,
+  emailReport,
 };

@@ -1,32 +1,48 @@
-const { getCostPerKwByPincode } = require('../config/solarPricing');
+const { calculateSolar } = require('../utils/solarCalculator');
 
-const roundToTwo = (value) => Number(value.toFixed(2));
+/**
+ * Service calculation wrapper for solar estimations on the backend
+ * @param {object} payload
+ * @returns {object|null}
+ */
+const calculateSolarEstimateData = (payload = {}) => {
+  const inputMode = payload.inputMode || 'bill';
+  const inputValue = Number(payload.inputValue) || Number(payload.monthlyElectricityBill) || 0;
+  const electricityRate = Number(payload.electricityRate) || 8.4;
+  const customerType = payload.customerType || 'residential';
+  const pincode = String(payload.pincode || '').trim();
+  const applySubsidy = payload.applySubsidy !== undefined
+    ? (payload.applySubsidy === true || payload.applySubsidy === 'true')
+    : true;
 
-const calculateSolarEstimateData = ({ pincode, monthlyElectricityBill }) => {
-  const normalizedPincode = String(pincode).trim();
-  const billAmount = Number(monthlyElectricityBill);
+  const result = calculateSolar({
+    inputMode,
+    inputValue,
+    electricityRate,
+    customerType,
+    pincode,
+    applySubsidy,
+  });
 
-  const { costPerKw, matchedPrefix, location, prefix, isDefaultPrice } = getCostPerKwByPincode(normalizedPincode);
+  if (!result) return null;
 
-  const systemSizeKw = billAmount / 1000;
-  const monthlySavings = billAmount * 0.9;
-  const yearlySavings = monthlySavings * 12;
-  const totalCost = systemSizeKw * costPerKw;
-  const paybackPeriodYears = totalCost / yearlySavings;
+  const roundToTwo = (value) => Number(Number(value).toFixed(2));
 
   return {
-    pincode: normalizedPincode,
-    prefix,
-    monthlyElectricityBill: roundToTwo(billAmount),
-    costPerKw,
-    matchedPrefix,
-    location,
-    isDefaultPrice,
-    systemSizeKw: roundToTwo(systemSizeKw),
-    monthlySavings: roundToTwo(monthlySavings),
-    yearlySavings: roundToTwo(yearlySavings),
-    totalCost: roundToTwo(totalCost),
-    paybackPeriodYears: roundToTwo(paybackPeriodYears),
+    ...result,
+    // Map compatible legacy fields
+    pincode,
+    monthlyElectricityBill: inputMode === 'bill' ? roundToTwo(inputValue) : roundToTwo(result.monthlyGenerationKw * electricityRate),
+    systemSizeKw: roundToTwo(result.plantSizeKw),
+    totalCost: roundToTwo(result.netCost),
+    grossCost: roundToTwo(result.grossCost),
+    subsidy: roundToTwo(result.subsidy),
+    netCost: roundToTwo(result.netCost),
+    monthlySavings: roundToTwo(result.monthlySavings),
+    yearlySavings: roundToTwo(result.yearlySavings),
+    lifetimeSavings: roundToTwo(result.lifetimeSavings),
+    paybackPeriodYears: roundToTwo(result.paybackPeriodYears),
+    roi: roundToTwo(result.roi),
   };
 };
 

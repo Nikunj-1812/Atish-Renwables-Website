@@ -17,6 +17,16 @@ const teamSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    phone: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    email: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     virtualCardLink: {
       type: String,
       trim: true,

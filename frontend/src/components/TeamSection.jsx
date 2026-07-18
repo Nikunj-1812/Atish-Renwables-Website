@@ -5,6 +5,7 @@ import SectionHeading from './SectionHeading';
 import Button from './Button';
 import { sectionMotion, staggerContainer, staggerItem, hoverLift } from '../utils/motion';
 import ImageCard from './ImageCard';
+import { API_URL } from '../utils/api';
 
 function TeamSection({ teamMembers }) {
   const visibleTeam = teamMembers || [];
@@ -36,7 +37,7 @@ function TeamSection({ teamMembers }) {
                 <div className="team-card__actions">
                   <Button
                     className="team-card__btn"
-                    href={member.virtualCardLink || `/vcard/${encodeURIComponent(member.name)}.vcf`}
+                    href={member.virtualCardLink || `${API_URL}/vcard/download?name=${encodeURIComponent(member.name)}&phone=${encodeURIComponent(member.phone || '')}&email=${encodeURIComponent(member.email || '')}&company=${encodeURIComponent('Atish Renewables')}`}
                     variant="secondary"
                   >
                     <User size={16} />

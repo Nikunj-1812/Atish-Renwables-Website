@@ -96,11 +96,19 @@ const validateProjectPayload = (body = {}, { requireImageUrl = false } = {}) => 
 
 const validateTeamPayload = (body = {}, { requireImageUrl = false } = {}) => {
   const errors = [];
-  const { name, role, imageUrl, virtualCardLink } = body;
+  const { name, role, imageUrl, phone, email, virtualCardLink } = body;
 
   if (!isNonEmptyString(name)) errors.push('name');
   if (!isNonEmptyString(role)) errors.push('role');
   if (requireImageUrl && !isNonEmptyString(imageUrl)) errors.push('imageUrl');
+
+  if (phone !== undefined && phone !== null && phone !== '' && !isNonEmptyString(phone)) {
+    errors.push('phone');
+  }
+
+  if (email !== undefined && email !== null && email !== '' && (!isNonEmptyString(email) || !EMAIL_REGEX.test(email.trim()))) {
+    errors.push('email');
+  }
 
   if (isNonEmptyString(virtualCardLink)) {
     try {

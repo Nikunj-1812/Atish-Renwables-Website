@@ -3,7 +3,7 @@ import HomeImg from '../assets/Home.png';
 import AboutSection from '../components/AboutSection';
 import WhyChooseSection from '../components/WhyChooseSection';
 import ProcessSection from '../components/ProcessSection';
-import HomeServicesSection from '../components/HomeServicesSection';
+import ServicesSection from '../components/ServicesSection';
 import { heroStats } from '../data/siteData';
 
 export default function Home() {
@@ -27,7 +27,7 @@ export default function Home() {
       <AboutSection />
       <WhyChooseSection />
       <ProcessSection />
-      <HomeServicesSection />
+      <ServicesSection />
     </>
   );
 }

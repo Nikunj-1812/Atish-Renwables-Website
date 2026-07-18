@@ -1,12 +1,14 @@
 const Team = require('../models/Team');
+const { escapeRegex } = require('../utils/escapeRegex');
 
 const buildTeamQuery = ({ search } = {}) => {
   const query = {};
 
   if (search) {
+    const escapedSearch = escapeRegex(search);
     query.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { role: { $regex: search, $options: 'i' } },
+      { name: { $regex: escapedSearch, $options: 'i' } },
+      { role: { $regex: escapedSearch, $options: 'i' } },
     ];
   }
 

@@ -67,7 +67,7 @@ function generateSolarReportPdf(data, stream) {
 
   // Customer Information Box
   doc.rect(50, 155, 495, 75).fill(BG_LIGHT);
-  doc.strokeColor(BORDER_COLOR).lineWidth(1).strokeRect(50, 155, 495, 75);
+  doc.rect(50, 155, 495, 75).strokeColor(BORDER_COLOR).lineWidth(1).stroke();
 
   doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(9.5).text('CUSTOMER & PROJECT OVERVIEW', 65, 167);
   
@@ -112,7 +112,7 @@ function generateSolarReportPdf(data, stream) {
   doc.text('Estimated 25-Year Cumulative Generation', 60, row4Y + 6);
   doc.font('Helvetica-Bold').text(`${new Intl.NumberFormat('en-IN').format(Math.round(data.lifetimeGenerationKw))} kWh (Units)`, 320, row4Y + 6);
 
-  doc.strokeColor(BORDER_COLOR).lineWidth(1).strokeRect(50, tableTop, 495, 100);
+  doc.rect(50, tableTop, 495, 100).strokeColor(BORDER_COLOR).lineWidth(1).stroke();
 
   // Section: Financial Savings & Investment Breakdown
   doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(11).text('2. FINANCIAL ANALYSIS & ROI', 50, 390);
@@ -165,7 +165,7 @@ function generateSolarReportPdf(data, stream) {
   doc.text('25-Year Cumulative Financial Savings', 60, fRow7Y + 6);
   doc.font('Helvetica-Bold').fillColor(PRIMARY_COLOR).text(formatINR(data.lifetimeSavings), 320, fRow7Y + 6);
 
-  doc.strokeColor(BORDER_COLOR).lineWidth(1).strokeRect(50, finTableTop, 495, 160);
+  doc.rect(50, finTableTop, 495, 160).strokeColor(BORDER_COLOR).lineWidth(1).stroke();
 
   // Footer on Page 1
   doc.fillColor(MUTED_COLOR).font('Helvetica').fontSize(8);
@@ -186,10 +186,9 @@ function generateSolarReportPdf(data, stream) {
   const chartY = 100;
   const chartW = 390;
   const chartH = 150;
-
   // Draw chart box background
   doc.rect(chartX, chartY, chartW, chartH).fill(BG_LIGHT);
-  doc.strokeColor(BORDER_COLOR).lineWidth(1).strokeRect(chartX, chartY, chartW, chartH);
+  doc.rect(chartX, chartY, chartW, chartH).strokeColor(BORDER_COLOR).lineWidth(1).stroke();
 
   // Y-axis gridlines & labels
   const years = 25;
@@ -247,7 +246,7 @@ function generateSolarReportPdf(data, stream) {
   doc.fillColor(PRIMARY_COLOR).font('Helvetica-Bold').fontSize(11).text('4. ENVIRONMENTAL BENEFIT SUMMARY', 50, 290);
 
   doc.rect(50, 310, 495, 95).fill(BG_LIGHT);
-  doc.strokeColor(BORDER_COLOR).lineWidth(1).strokeRect(50, 310, 495, 95);
+  doc.rect(50, 310, 495, 95).strokeColor(BORDER_COLOR).lineWidth(1).stroke();
 
   doc.fillColor(TEXT_COLOR).font('Helvetica-Bold').fontSize(9);
   doc.text('Annual CO2 Offsets & Metrics', 65, 323);
@@ -297,7 +296,7 @@ function generateSolarReportPdf(data, stream) {
 
   // Disclaimer Note Box
   doc.rect(50, 640, 495, 75).fill('#fff9e6');
-  doc.strokeColor('#ffe28c').lineWidth(1).strokeRect(50, 640, 495, 75);
+  doc.rect(50, 640, 495, 75).strokeColor('#ffe28c').lineWidth(1).stroke();
 
   doc.fillColor('#855d00').font('Helvetica-Bold').fontSize(8).text('IMPORTANT NOTICE', 60, 650);
   doc.font('Helvetica').fontSize(7.6).text(

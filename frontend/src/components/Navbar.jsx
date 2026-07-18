@@ -11,8 +11,6 @@ export default function Navbar() {
 
   const handleLinkClick = () => {
     setMenuOpen(false);
-    // Let Framer Motion's exit animation start before scrolling to top
-    setTimeout(() => window.scrollTo(0, 0), 100);
   };
 
   return (

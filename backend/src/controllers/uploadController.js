@@ -13,6 +13,13 @@ const uploadImage = async (req, res) => {
     }
 
     if (!isCloudinaryConfigured()) {
+      if (process.env.NODE_ENV === 'production') {
+        return sendError(res, {
+          statusCode: 500,
+          message: 'Local file upload fallback is disabled in production. Cloudinary is required.',
+        });
+      }
+
       const uploadsDir = path.join(__dirname, '..', '..', 'public', 'uploads');
       await fs.mkdir(uploadsDir, { recursive: true });
 

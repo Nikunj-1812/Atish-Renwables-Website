@@ -10,6 +10,8 @@ const { parseAllowedOrigins } = require('./config/env');
 const { sendSuccess } = require('./utils/apiResponse');
 
 const app = express();
+app.set('trust proxy', 1);
+
 const allowedOrigins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS);
 
 const isAllowedOrigin = (origin) => {
@@ -17,11 +19,11 @@ const isAllowedOrigin = (origin) => {
 		return true;
 	}
 
-	if (origin.endsWith('.vercel.app')) {
+	if (/^https?:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
 		return true;
 	}
 
-	if (origin.endsWith('.onrender.com')) {
+	if (/^https?:\/\/[a-z0-9-]+\.onrender\.com$/i.test(origin)) {
 		return true;
 	}
 

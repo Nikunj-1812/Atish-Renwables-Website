@@ -1,14 +1,16 @@
 const Project = require('../models/Project');
+const { escapeRegex } = require('../utils/escapeRegex');
 
 const buildProjectQuery = ({ search, category, megaProject } = {}) => {
   const query = {};
 
   if (search) {
+    const escapedSearch = escapeRegex(search);
     query.$or = [
-      { projectName: { $regex: search, $options: 'i' } },
-      { location: { $regex: search, $options: 'i' } },
-      { city: { $regex: search, $options: 'i' } },
-      { district: { $regex: search, $options: 'i' } },
+      { projectName: { $regex: escapedSearch, $options: 'i' } },
+      { location: { $regex: escapedSearch, $options: 'i' } },
+      { city: { $regex: escapedSearch, $options: 'i' } },
+      { district: { $regex: escapedSearch, $options: 'i' } },
     ];
   }
 

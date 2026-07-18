@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MessageCircle, Phone, X } from 'lucide-react';
+import { submitContactForm } from '../utils/api';
 
 const PHONE_NUMBER = '+916359260330';
 const WA_BASE = 'https://wa.me/916359260330';
@@ -16,14 +17,15 @@ function WhatsAppIcon({ size = 18 }) {
 }
 
 // Quick-action buttons shown after askRoof step
-function QuickActions({ onWhatsApp, onCall }) {
+function QuickActions({ onWhatsApp, onCall, open }) {
+  const tabVal = open ? 0 : -1;
   return (
     <div className="chatbot-quick-actions">
-      <button className="chatbot-qa-btn chatbot-qa-btn--wa" onClick={onWhatsApp} aria-label="Continue on WhatsApp">
+      <button className="chatbot-qa-btn chatbot-qa-btn--wa" onClick={onWhatsApp} aria-label="Continue on WhatsApp" tabIndex={tabVal}>
         <WhatsAppIcon size={16} />
         WhatsApp
       </button>
-      <button className="chatbot-qa-btn chatbot-qa-btn--call" onClick={onCall} aria-label="Call now">
+      <button className="chatbot-qa-btn chatbot-qa-btn--call" onClick={onCall} aria-label="Call now" tabIndex={tabVal}>
         <Phone size={15} />
         Call Now
       </button>
@@ -48,6 +50,25 @@ export default function Chatbot() {
 
   const pushBot = (text, delay = 350) => {
     setTimeout(() => setMessages((m) => [...m, { from: 'bot', text }]), delay);
+  };
+
+  const syncLeadToCRM = async (currentLead) => {
+    try {
+      const payload = {
+        name: currentLead.name || 'Chatbot User',
+        phone: currentLead.phone || 'N/A',
+        email: 'chatbot@atishrenewables.com',
+        city: currentLead.city || 'N/A',
+        requirement: String(currentLead.property || 'residential').toLowerCase() === 'commercial' ? 'commercial' : 'residential',
+        message: `Chatbot capture: Property type: ${currentLead.property || 'N/A'}, Roof type: ${currentLead.roof || 'N/A'}.`,
+      };
+      if (currentLead.bill && !Number.isNaN(Number(currentLead.bill))) {
+        payload.monthlyBill = Number(currentLead.bill);
+      }
+      await submitContactForm(payload);
+    } catch (error) {
+      console.error('Failed to sync chatbot lead:', error);
+    }
   };
 
   const handleWhatsApp = (customLead) => {
@@ -107,10 +128,12 @@ export default function Chatbot() {
       setShowQuickActions(true);
       setStep('askPhone');
     } else if (step === 'askPhone') {
-      setLead((l) => ({ ...l, phone: trimmed }));
+      const updatedLead = { ...lead, phone: trimmed };
+      setLead(updatedLead);
       setShowQuickActions(false);
       pushBot('Thanks! Would you like a free consultation on WhatsApp or should our expert call you?');
       setStep('done');
+      syncLeadToCRM(updatedLead);
     } else if (step === 'done') {
       if (/whatsapp/i.test(trimmed)) {
         pushBot('Opening WhatsApp for a quick consultation — please continue there.');
@@ -143,7 +166,7 @@ export default function Chatbot() {
             <div className="chatbot-sub">Free consultation • Quick lead capture</div>
           </div>
           {open && (
-            <button className="chatbot-close" onClick={toggleChat} aria-label="Close chat">
+            <button className="chatbot-close" onClick={toggleChat} aria-label="Close chat" tabIndex={open ? 0 : -1}>
               <X size={16} />
             </button>
           )}
@@ -158,17 +181,24 @@ export default function Chatbot() {
             ))}
             {showQuickActions && (
               <QuickActions
+                open={open}
                 onWhatsApp={() => {
                   setMessages((m) => [...m, { from: 'user', text: 'WhatsApp' }]);
                   setShowQuickActions(false);
                   pushBot('Opening WhatsApp for a quick consultation — please continue there.');
-                  setTimeout(() => handleWhatsApp(), 400);
+                  const updatedLead = { ...lead, phone: 'WhatsApp Clicked' };
+                  setLead(updatedLead);
+                  setTimeout(() => handleWhatsApp(updatedLead), 400);
+                  syncLeadToCRM(updatedLead);
                 }}
                 onCall={() => {
                   setMessages((m) => [...m, { from: 'user', text: 'Call Now' }]);
                   setShowQuickActions(false);
                   pushBot('Opening phone dialer now...');
+                  const updatedLead = { ...lead, phone: 'Call Clicked' };
+                  setLead(updatedLead);
                   setTimeout(() => handleCall(), 400);
+                  syncLeadToCRM(updatedLead);
                 }}
               />
             )}
@@ -182,8 +212,9 @@ export default function Chatbot() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Type a message..."
+            tabIndex={open ? 0 : -1}
           />
-          <button className="chatbot-send" onClick={handleSend} aria-label="Send message">
+          <button className="chatbot-send" onClick={handleSend} aria-label="Send message" tabIndex={open ? 0 : -1}>
             Send
           </button>
         </div>

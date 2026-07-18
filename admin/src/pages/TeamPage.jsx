@@ -9,6 +9,8 @@ const initialForm = {
   name: '',
   role: '',
   imageUrl: '',
+  phone: '',
+  email: '',
   virtualCardLink: '',
 };
 
@@ -56,6 +58,8 @@ export default function TeamPage() {
       name: member.name || '',
       role: member.role || '',
       imageUrl: member.imageUrl || '',
+      phone: member.phone || '',
+      email: member.email || '',
       virtualCardLink: member.virtualCardLink || '',
     });
     setPreviewUrl(member.imageUrl || '');
@@ -228,6 +232,16 @@ export default function TeamPage() {
                 <label className="grid gap-1 text-sm font-medium text-slate-700">
                   Role
                   <input value={form.role} onChange={(event) => setForm((prev) => ({ ...prev, role: event.target.value }))} className="rounded-xl border border-slate-200 px-3 py-2 focus:border-brand-500 focus:outline-none" required />
+                </label>
+
+                <label className="grid gap-1 text-sm font-medium text-slate-700">
+                  Phone
+                  <input value={form.phone} onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))} className="rounded-xl border border-slate-200 px-3 py-2 focus:border-brand-500 focus:outline-none" placeholder="+91 00000 00000" />
+                </label>
+
+                <label className="grid gap-1 text-sm font-medium text-slate-700">
+                  Email
+                  <input type="email" value={form.email} onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))} className="rounded-xl border border-slate-200 px-3 py-2 focus:border-brand-500 focus:outline-none" placeholder="john@example.com" />
                 </label>
 
                 <label className="grid gap-1 text-sm font-medium text-slate-700">

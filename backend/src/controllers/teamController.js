@@ -13,6 +13,8 @@ const normalizeTeamMember = (member) => ({
   name: member.name,
   role: member.role,
   imageUrl: member.imageUrl,
+  phone: member.phone || '',
+  email: member.email || '',
   virtualCardLink: member.virtualCardLink || '',
   isDefault: Boolean(member.isDefault),
   createdAt: member.createdAt,

@@ -5,6 +5,7 @@ const {
   validateLeadStatus,
   validateRequirementFilter,
 } = require('../utils/requestValidators');
+const { escapeRegex } = require('../utils/escapeRegex');
 
 const toDateBoundary = (value, endOfDay = false) => {
   if (!value) {
@@ -69,7 +70,8 @@ const buildLeadQuery = ({ requirement, status, search, dateFrom, dateTo }) => {
   }
 
   if (search && String(search).trim()) {
-    const searchRegex = new RegExp(String(search).trim(), 'i');
+    const escapedSearch = escapeRegex(String(search).trim());
+    const searchRegex = new RegExp(escapedSearch, 'i');
     query.$or = [
       { name: searchRegex },
       { phone: searchRegex },

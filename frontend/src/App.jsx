@@ -39,7 +39,7 @@ function Layout() {
   const [showIntro, setShowIntro] = useState(true);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setShowIntro(false), 4600);
+    const timer = window.setTimeout(() => setShowIntro(false), 1800);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -117,7 +117,7 @@ function Layout() {
             </Suspense>
           </motion.main>
         </AnimatePresence>
-        <CTA />
+        {location.pathname !== '/contact' && <CTA />}
         <Footer />
         <Chatbot />
       </div>

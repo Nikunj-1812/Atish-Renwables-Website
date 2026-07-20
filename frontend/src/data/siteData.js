@@ -217,9 +217,8 @@ export const contactMethods = [
 
 export const calculatorResults = {
   baseCostPerKw: 45000,
-  averageTariff: 8,
+  averageTariff: 8.4,
   solarYieldPerKw: 120,
-  subsidyFactor: 0.16,
 };
 
 export const icons = {

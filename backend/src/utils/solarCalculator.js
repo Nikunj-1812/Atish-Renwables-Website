@@ -2,7 +2,7 @@ const DEFAULT_ELECTRICITY_RATE = 8.4;
 const DAILY_GENERATION_PER_KW = 4.8;
 const DAYS_PER_MONTH = 30;
 const DAYS_PER_YEAR = 365;
-const SYSTEM_LIFETIME = 25;
+const SYSTEM_LIFETIME = 30;
 
 const PINCODE_COST_MAP = {
   '110': { location: 'Delhi', costPerKw: 45000 },
@@ -24,12 +24,10 @@ const PINCODE_COST_MAP = {
 function calculateSolar({
   inputMode = 'bill',
   inputValue = 0,
-  electricityRate = DEFAULT_ELECTRICITY_RATE,
   customerType = 'residential',
   pincode = '',
-  applySubsidy = true,
 }) {
-  const rate = Number(electricityRate) || DEFAULT_ELECTRICITY_RATE;
+  const rate = DEFAULT_ELECTRICITY_RATE;
   const value = Number(inputValue) || 0;
 
   if (value <= 0) return null;
@@ -66,7 +64,7 @@ function calculateSolar({
   const lifetimeSavings = lifetimeGenerationKw * rate;
 
   // Pricing
-  let costPerKw = customerType === 'commercial' ? 35000 : 50000;
+  const costPerKw = customerType === 'commercial' ? 38000 : 50000;
   let location = 'default';
   const normPincode = String(pincode || '').trim();
   if (normPincode && normPincode.length >= 3) {
@@ -74,25 +72,12 @@ function calculateSolar({
     const pricing = PINCODE_COST_MAP[prefix];
     if (pricing) {
       location = pricing.location;
-      costPerKw = customerType === 'commercial' ? Math.round(pricing.costPerKw * 0.7) : pricing.costPerKw;
     }
   }
 
   const grossCost = plantSizeKw * costPerKw;
 
-  // Subsidy PM Surya Ghar
-  let subsidy = 0;
-  if (customerType === 'residential' && applySubsidy) {
-    if (plantSizeKw <= 2) {
-      subsidy = plantSizeKw * 30000;
-    } else if (plantSizeKw < 3) {
-      subsidy = 60000 + (plantSizeKw - 2) * 18000;
-    } else {
-      subsidy = 78000;
-    }
-  }
-
-  const netCost = grossCost - subsidy;
+  const netCost = grossCost;
   const finalInvestment = netCost;
 
   // ROI
@@ -114,7 +99,6 @@ function calculateSolar({
     yearlyGenerationKw,
     lifetimeGenerationKw,
     grossCost,
-    subsidy,
     netCost,
     finalInvestment,
     monthlySavings,

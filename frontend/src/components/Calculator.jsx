@@ -25,7 +25,7 @@ import {
 import SectionHeading from './SectionHeading';
 import { sectionMotion, staggerContainer, staggerItem, hoverLift } from '../utils/motion';
 import { calculateSolarEstimate, emailSolarReport, API_URL } from '../utils/api';
-import { calculateSolar, DEFAULT_ELECTRICITY_RATE } from '../utils/solarCalculator';
+import { calculateSolar } from '../utils/solarCalculator';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatINR(value) {
@@ -50,9 +50,7 @@ export default function Calculator() {
     email: '',
     cityPincode: '',
     inputValue: '',
-    electricityRate: String(DEFAULT_ELECTRICITY_RATE),
     state: 'Gujarat',
-    applySubsidy: true,
   });
 
   const [errors, setErrors] = useState({});
@@ -65,8 +63,7 @@ export default function Calculator() {
   // Track focused field for active styling states
   const [focusedField, setFocusedField] = useState(null);
 
-  // Advanced options toggle
-  const [showAdvanced, setShowAdvanced] = useState(false);
+
 
   // Email report send states
   const [emailSending, setEmailSending] = useState(false);
@@ -78,18 +75,14 @@ export default function Calculator() {
     return calculateSolar({
       inputMode,
       inputValue: parseFloat(formData.inputValue) || 0,
-      electricityRate: parseFloat(formData.electricityRate) || DEFAULT_ELECTRICITY_RATE,
       customerType: type,
       pincode: formData.cityPincode,
-      applySubsidy: formData.applySubsidy,
     });
   }, [
     inputMode,
     formData.inputValue,
-    formData.electricityRate,
     type,
     formData.cityPincode,
-    formData.applySubsidy,
   ]);
 
   // Premium consistent styling constants
@@ -183,15 +176,7 @@ export default function Calculator() {
       if (!firstInvalidId) firstInvalidId = 'calcCity';
     }
 
-    // Validate Rate in Advanced parameters
-    const valRate = Number(formData.electricityRate);
-    if (formData.electricityRate === '') {
-      localErrors.electricityRate = 'Rate is required.';
-      if (!firstInvalidId) firstInvalidId = 'electricityRate';
-    } else if (!Number.isFinite(valRate) || Number.isNaN(valRate) || valRate <= 0) {
-      localErrors.electricityRate = 'Rate must be greater than zero.';
-      if (!firstInvalidId) firstInvalidId = 'electricityRate';
-    }
+
 
     setErrors(localErrors);
     return { isValid: Object.keys(localErrors).length === 0, firstInvalidId };
@@ -211,7 +196,6 @@ export default function Calculator() {
         const phoneVal = String(field === 'phone' ? val : formData.phone);
         const emailVal = String(field === 'email' ? val : formData.email);
         const cityVal = String(field === 'cityPincode' ? val : formData.cityPincode);
-        const rateVal = Number(field === 'electricityRate' ? val : formData.electricityRate);
 
         if (field === 'inputValue') {
           if (val === '') errorsCheck.inputValue = 'This field is required.';
@@ -230,10 +214,7 @@ export default function Calculator() {
         if (field === 'cityPincode') {
           if (!cityVal.trim()) errorsCheck.cityPincode = 'Pincode is required.';
         }
-        if (field === 'electricityRate') {
-          if (val === '') errorsCheck.electricityRate = 'Rate required.';
-          else if (!Number.isFinite(rateVal) || rateVal <= 0) errorsCheck.electricityRate = 'Must be > 0.';
-        }
+
 
         setErrors((prev) => ({ ...prev, [field]: errorsCheck[field] || '' }));
       }, 0);
@@ -270,9 +251,8 @@ export default function Calculator() {
       monthlyElectricityBill: parseFloat(formData.inputValue),
       inputValue: parseFloat(formData.inputValue),
       inputMode: inputMode,
-      electricityRate: parseFloat(formData.electricityRate),
+      electricityRate: 8.4,
       customerType: type,
-      applySubsidy: formData.applySubsidy,
     };
 
     const result = await calculateSolarEstimate(payload);
@@ -309,9 +289,8 @@ export default function Calculator() {
       state: formData.state,
       inputMode: inputMode,
       inputValue: parseFloat(formData.inputValue),
-      electricityRate: parseFloat(formData.electricityRate),
+      electricityRate: 8.4,
       customerType: type,
-      applySubsidy: formData.applySubsidy,
     };
 
     const result = await emailSolarReport(payload);
@@ -378,7 +357,7 @@ export default function Calculator() {
   const graphWidth = chartWidth - paddingLeft - paddingRight;
   const graphHeight = chartHeight - paddingTop - paddingBottom;
 
-  const totalYears = 25;
+  const totalYears = 30;
   const maxSavings = results ? results.lifetimeSavings : 100000;
   const netCostVal = results ? results.netCost : 50000;
   const chartMax = Math.max(maxSavings, netCostVal) * 1.1 || 100000;
@@ -407,12 +386,10 @@ export default function Calculator() {
       `Atish Renewables\n\n` +
       `*Customer:* ${formData.name}\n` +
       `*System Size:* ${results.plantSizeKw.toFixed(1)} kW\n` +
-      `*Gross Cost:* ₹${Math.round(results.grossCost).toLocaleString('en-IN')}\n` +
-      `*Gov. Subsidy:* ₹${Math.round(results.subsidy).toLocaleString('en-IN')}\n` +
-      `*Net Investment:* ₹${Math.round(results.netCost).toLocaleString('en-IN')}\n` +
+      `*Total Project Cost:* ₹${Math.round(results.netCost).toLocaleString('en-IN')}\n` +
       `*Monthly Savings:* ₹${Math.round(results.monthlySavings).toLocaleString('en-IN')}\n` +
       `*Yearly Savings:* ₹${Math.round(results.yearlySavings).toLocaleString('en-IN')}\n` +
-      `*Lifetime Savings (25 yrs):* ₹${Math.round(results.lifetimeSavings).toLocaleString('en-IN')}\n` +
+      `*Lifetime Savings (30 yrs):* ₹${Math.round(results.lifetimeSavings).toLocaleString('en-IN')}\n` +
       `*Payback Period:* ${results.paybackPeriodYears.toFixed(1)} years\n` +
       `*ROI:* ${results.roi.toFixed(1)}%\n\n` +
       `Generate your professional report at Atish Renewables!`
@@ -426,11 +403,10 @@ export default function Calculator() {
       new URLSearchParams({
         inputMode,
         inputValue: formData.inputValue,
-        electricityRate: formData.electricityRate,
+        electricityRate: '8.4',
         customerType: type,
         pincode: formData.cityPincode,
         state: formData.state,
-        applySubsidy: String(formData.applySubsidy),
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
@@ -563,122 +539,7 @@ export default function Calculator() {
                   )}
                 </div>
 
-                {/* Collapsible Advanced Options */}
-                <div>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    style={{
-                      width: '100%',
-                      marginBottom: 0,
-                      justifyContent: 'space-between',
-                      padding: '8px 14px',
-                      minHeight: '36px',
-                      fontSize: '0.8rem',
-                      borderRadius: 'var(--r-md)',
-                    }}
-                    onClick={() => setShowAdvanced(!showAdvanced)}
-                    aria-expanded={showAdvanced}
-                  >
-                    <span>Advanced Calculation Parameters</span>
-                    <span>{showAdvanced ? '▲' : '▼'}</span>
-                  </button>
 
-                  <AnimatePresence>
-                    {showAdvanced && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        style={{ overflow: 'hidden' }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 12, paddingBottom: 4 }}>
-                          {/* Electricity Rate */}
-                          <div className="field">
-                            <label htmlFor="electricityRate" style={labelStyle}>Electricity Rate (per Unit)</label>
-                            <div className="calc-input-wrap" style={{
-                              border: errors.electricityRate ? '1.5px solid #e11d48' : focusedField === 'electricityRate' ? '1.5px solid var(--primary)' : '1.5px solid var(--border)',
-                              boxShadow: focusedField === 'electricityRate' ? '0 0 0 3px rgba(0, 80, 88, 0.12)' : 'none',
-                              height: '46px',
-                            }}>
-                              <span className="calc-input-prefix">₹</span>
-                              <input
-                                id="electricityRate"
-                                type="number"
-                                step="0.1"
-                                value={formData.electricityRate}
-                                onChange={handleFieldChange('electricityRate')}
-                                onFocus={() => setFocusedField('electricityRate')}
-                                onBlur={() => setFocusedField(null)}
-                                className="calc-bill-input"
-                              />
-                            </div>
-                            {errors.electricityRate && (
-                              <span style={{ color: '#e11d48', fontSize: '0.75rem', marginTop: 4, display: 'block' }}>
-                                {errors.electricityRate}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* State Select */}
-                          <div className="field">
-                            <label htmlFor="stateSelect" style={labelStyle}>Installation State</label>
-                            <div className="calc-input-wrap" style={{
-                              border: focusedField === 'state' ? '1.5px solid var(--primary)' : '1.5px solid var(--border)',
-                              boxShadow: focusedField === 'state' ? '0 0 0 3px rgba(0, 80, 88, 0.12)' : 'none',
-                              padding: '0 8px',
-                              height: '46px',
-                            }}>
-                              <select
-                                id="stateSelect"
-                                value={formData.state}
-                                onChange={handleFieldChange('state')}
-                                onFocus={() => setFocusedField('state')}
-                                onBlur={() => setFocusedField(null)}
-                                style={{
-                                  width: '100%',
-                                  border: 'none',
-                                  outline: 'none',
-                                  background: 'transparent',
-                                  padding: '10px 4px',
-                                  fontWeight: 600,
-                                  color: 'var(--fg)',
-                                }}
-                              >
-                                <option value="Gujarat">Gujarat</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Delhi">Delhi</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Tamil Nadu">Tamil Nadu</option>
-                                <option value="Telangana">Telangana</option>
-                                <option value="Rajasthan">Rajasthan</option>
-                                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                <option value="West Bengal">West Bengal</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          {/* Subsidy Option */}
-                          {type === 'residential' && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                              <input
-                                id="applySubsidy"
-                                type="checkbox"
-                                checked={formData.applySubsidy}
-                                onChange={handleFieldChange('applySubsidy')}
-                                style={{ width: 16, height: 16, accentColor: 'var(--primary)', cursor: 'pointer' }}
-                              />
-                              <label htmlFor="applySubsidy" style={{ fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer', userSelect: 'none' }}>
-                                Apply National PM-Surya Ghar Subsidy
-                              </label>
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
 
                 <hr className="calc-divider" />
 
@@ -867,7 +728,7 @@ export default function Calculator() {
 
                       <p className="calc-disclaimer">
                         <Info size={13} aria-hidden="true" />
-                        Estimates use ₹{formData.electricityRate}/unit tariff. Subsidy calculations apply only to residential connections. Full submission unlocks visual charts, payback tables, and PDF options.
+                        Estimates use ₹8.40/unit tariff. Full submission unlocks visual charts, payback tables, and PDF options.
                       </p>
                     </motion.div>
                   ) : (
@@ -931,7 +792,7 @@ export default function Calculator() {
                 </div>
                 <div className="panel" style={{ padding: '16px', borderRadius: 'var(--r-md)', textAlign: 'center', border: '1px solid var(--border)' }}>
                   <Wallet size={20} style={{ color: 'var(--primary)', marginBottom: 8, display: 'inline-block' }} />
-                  <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 800, margin: 0 }}>Net Investment</p>
+                  <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', color: 'var(--muted)', fontWeight: 800, margin: 0 }}>Total Project Cost</p>
                   <p style={{ fontSize: '1.25rem', fontWeight: 800, margin: '4px 0 0 0', color: 'var(--primary-strong)' }}>{formatINR(results.netCost)}</p>
                 </div>
                 <div className="panel" style={{ padding: '16px', borderRadius: 'var(--r-md)', textAlign: 'center', border: '1px solid var(--border)' }}>
@@ -954,17 +815,8 @@ export default function Calculator() {
                   <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--primary)' }}>Financial Valuation</h4>
                   
                   <div className="panel" style={{ padding: '16px', borderRadius: 'var(--r-lg)', display: 'flex', flexDirection: 'column', gap: 10, border: '1px solid var(--border)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                      <span style={{ color: 'var(--muted)' }}>Gross Cost:</span>
-                      <strong style={{ color: 'var(--fg)' }}>{formatINR(results.grossCost)}</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                      <span style={{ color: 'var(--muted)' }}>Government Subsidy:</span>
-                      <strong style={{ color: '#12b04a' }}>- {formatINR(results.subsidy)}</strong>
-                    </div>
-                    <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '4px 0' }} />
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem', fontWeight: 800 }}>
-                      <span style={{ color: 'var(--primary-strong)' }}>Net Cost (Investment):</span>
+                      <span style={{ color: 'var(--primary-strong)' }}>Total Project Cost:</span>
                       <span style={{ color: 'var(--primary-strong)' }}>{formatINR(results.netCost)}</span>
                     </div>
                     <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '4px 0' }} />
@@ -977,7 +829,7 @@ export default function Calculator() {
                       <strong style={{ color: 'var(--fg)' }}>{formatINR(results.yearlySavings)}</strong>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
-                      <span style={{ color: 'var(--muted)' }}>25-Year Cumulative Savings:</span>
+                      <span style={{ color: 'var(--muted)' }}>30-Year Cumulative Savings:</span>
                       <strong style={{ color: 'var(--primary-strong)' }}>{formatINR(results.lifetimeSavings)}</strong>
                     </div>
                   </div>
@@ -985,7 +837,7 @@ export default function Calculator() {
 
                 {/* Return Curve (SVG Chart) */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--primary)' }}>25-Year Cumulative Returns Curve</h4>
+                  <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: 0, color: 'var(--primary)' }}>30-Year Cumulative Returns Curve</h4>
                   
                   <div className="panel" style={{ padding: '12px', borderRadius: 'var(--r-lg)', background: '#ffffff', display: 'flex', justifyContent: 'center', border: '1px solid var(--border)' }}>
                     <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} style={{ width: '100%', height: 'auto', maxHeight: '200px' }}>
@@ -1022,11 +874,11 @@ export default function Calculator() {
 
                       {/* X-Axis labels */}
                       <text x={paddingLeft} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 0</text>
-                      <text x={paddingLeft + graphWidth * 0.2} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 5</text>
-                      <text x={paddingLeft + graphWidth * 0.4} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 10</text>
-                      <text x={paddingLeft + graphWidth * 0.6} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 15</text>
-                      <text x={paddingLeft + graphWidth * 0.8} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 20</text>
-                      <text x={paddingLeft + graphWidth} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 25</text>
+                      <text x={paddingLeft + graphWidth * 0.2} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 6</text>
+                      <text x={paddingLeft + graphWidth * 0.4} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 12</text>
+                      <text x={paddingLeft + graphWidth * 0.6} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 18</text>
+                      <text x={paddingLeft + graphWidth * 0.8} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 24</text>
+                      <text x={paddingLeft + graphWidth} y={chartHeight - 12} fontSize="9" fontWeight="700" fill="var(--muted)" textAnchor="middle">Yr 30</text>
 
                       {/* Y-Axis Label / Tooltip */}
                       <text x={paddingLeft - 8} y={investmentY + 3} fontSize="9" fontWeight="700" fill="#b45309" textAnchor="end">Net Cost</text>
@@ -1079,7 +931,7 @@ export default function Calculator() {
                     </div>
 
                     <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--muted)', lineHeight: 1.4 }}>
-                      Installing this system will displace carbon-intensive grid energy, preventing massive fossil-fuel coal consumption over its 25-year lifetime.
+                      Installing this system will displace carbon-intensive grid energy, preventing massive fossil-fuel coal consumption over its 30-year lifetime.
                     </p>
                   </div>
                 </div>

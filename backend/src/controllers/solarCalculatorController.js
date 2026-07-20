@@ -47,7 +47,7 @@ const calculateSolarEstimate = async (req, res) => {
         requirement: req.body.customerType === 'commercial' ? 'commercial' : 'residential',
         monthlyBill: Number(estimate.monthlyElectricityBill),
         message: `Solar Calculator Estimate Submission. Input Mode: ${req.body.inputMode || 'bill'}. Pincode: ${req.body.pincode.trim()}.${!isDefaultLoc ? ` Matched Location: ${estimate.location}.` : ''}`,
-        notes: `Estimate Details:\n- Input Mode: ${req.body.inputMode || 'bill'}\n- System Size: ${estimate.systemSizeKw} kW\n- Gross Cost: ₹${estimate.grossCost}\n- Subsidy: ₹${estimate.subsidy}\n- Net Cost: ₹${estimate.netCost}\n- Payback Period: ${estimate.paybackPeriodYears} years\n- Monthly Savings: ₹${estimate.monthlySavings}\n- Yearly Savings: ₹${estimate.yearlySavings}\n- ROI: ${estimate.roi}%\n- Environmental Score: ${estimate.environmentalScore}/100`,
+        notes: `Estimate Details:\n- Input Mode: ${req.body.inputMode || 'bill'}\n- System Size: ${estimate.systemSizeKw} kW\n- Total Cost: ₹${estimate.netCost}\n- Payback Period: ${estimate.paybackPeriodYears} years\n- Monthly Savings: ₹${estimate.monthlySavings}\n- Yearly Savings: ₹${estimate.yearlySavings}\n- ROI: ${estimate.roi}%\n- Environmental Score: ${estimate.environmentalScore}/100`,
       };
 
       if (getIsConnected()) {
@@ -86,25 +86,19 @@ const downloadPdfReport = async (req, res) => {
     const {
       inputMode,
       inputValue,
-      electricityRate,
       customerType,
       pincode,
       state,
-      applySubsidy,
       name,
       phone,
       email,
     } = req.query;
 
-    const parsedApplySubsidy = applySubsidy === undefined ? true : (applySubsidy === 'true' || applySubsidy === true);
-
     const estimate = calculateSolarEstimateData({
       inputMode,
       inputValue: parseFloat(inputValue),
-      electricityRate: parseFloat(electricityRate),
       customerType,
       pincode,
-      applySubsidy: parsedApplySubsidy,
     });
 
     if (!estimate) {
@@ -141,11 +135,9 @@ const emailReport = async (req, res) => {
     const {
       inputMode,
       inputValue,
-      electricityRate,
       customerType,
       pincode,
       state,
-      applySubsidy,
       name,
       phone,
       email,
@@ -158,15 +150,11 @@ const emailReport = async (req, res) => {
       });
     }
 
-    const parsedApplySubsidy = applySubsidy === undefined ? true : (applySubsidy === 'true' || applySubsidy === true);
-
     const estimate = calculateSolarEstimateData({
       inputMode,
       inputValue: parseFloat(inputValue),
-      electricityRate: parseFloat(electricityRate),
       customerType,
       pincode,
-      applySubsidy: parsedApplySubsidy,
     });
 
     if (!estimate) {

@@ -8,20 +8,14 @@ const { calculateSolar } = require('../utils/solarCalculator');
 const calculateSolarEstimateData = (payload = {}) => {
   const inputMode = payload.inputMode || 'bill';
   const inputValue = Number(payload.inputValue) || Number(payload.monthlyElectricityBill) || 0;
-  const electricityRate = Number(payload.electricityRate) || 8.4;
+  const electricityRate = 8.4;
   const customerType = payload.customerType || 'residential';
   const pincode = String(payload.pincode || '').trim();
-  const applySubsidy = payload.applySubsidy !== undefined
-    ? (payload.applySubsidy === true || payload.applySubsidy === 'true')
-    : true;
-
   const result = calculateSolar({
     inputMode,
     inputValue,
-    electricityRate,
     customerType,
     pincode,
-    applySubsidy,
   });
 
   if (!result) return null;
@@ -36,7 +30,6 @@ const calculateSolarEstimateData = (payload = {}) => {
     systemSizeKw: roundToTwo(result.plantSizeKw),
     totalCost: roundToTwo(result.netCost),
     grossCost: roundToTwo(result.grossCost),
-    subsidy: roundToTwo(result.subsidy),
     netCost: roundToTwo(result.netCost),
     monthlySavings: roundToTwo(result.monthlySavings),
     yearlySavings: roundToTwo(result.yearlySavings),

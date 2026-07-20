@@ -42,7 +42,7 @@ async function sendSolarReportEmail(toEmail, customerData, pdfBuffer) {
             <td style="padding: 8px 0; text-align: right; font-weight: bold; border-bottom: 1px solid #eef5f7; color: #005058;">${systemSize} kW</td>
           </tr>
           <tr>
-            <td style="padding: 8px 0; color: #4a5b61; border-bottom: 1px solid #eef5f7;">Net Project Cost (with Subsidy)</td>
+            <td style="padding: 8px 0; color: #4a5b61; border-bottom: 1px solid #eef5f7;">Total Project Cost</td>
             <td style="padding: 8px 0; text-align: right; font-weight: bold; border-bottom: 1px solid #eef5f7; color: #005058;">${netInvestment}</td>
           </tr>
           <tr>
